@@ -1,4 +1,4 @@
-name: Pages Build and Deployment
+ name: Pages Build and Deployment
 
 on:
   push:
@@ -12,10 +12,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build and deploy
-        run: echo "Building and deploying..."
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Site
+        run: npm run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NOVAKEY2 }}
-              - name: Notify on failure
-      if: failure()
-      run: echo "Deployment failed!"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "Deployment failed!"

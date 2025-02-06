@@ -44,7 +44,7 @@ deploy:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.NOVAKEY2 }}
+          GITHUB_TOKEN: ${{ secretsNOVAKEY3
 
       - name: Notify on failure
         if: failure()

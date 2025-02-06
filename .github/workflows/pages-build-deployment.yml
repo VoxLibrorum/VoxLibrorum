@@ -1,16 +1,5 @@
-name: Pages Build and Deployment
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -24,11 +13,20 @@ jobs:
           name: github-pages
           path: ./
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Download Pages Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: ./
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NOVAKEY3 }}
-
-      - name: Notify on failure
-        if: failure()
-        run: echo "Deployment failed!"

@@ -19,7 +19,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: ./
+          path: pages-build-deployment.yml
 
   deploy:
     needs: build
@@ -32,7 +32,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-          path: ./
+          path: pages-build-deployment.yml
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1

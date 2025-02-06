@@ -6,38 +6,23 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Site
-        run: npm run build
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: github-pages
-          path: ./public
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v3
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: ./
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1

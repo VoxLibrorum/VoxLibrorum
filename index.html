@@ -207,11 +207,11 @@
                         <form class="mt-6 space-y-4">
                             <div>
                                 <label for="newsletter-name" class="block text-sm font-semibold text-gray-700">Name</label>
-                                <input id="newsletter-name" type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
+                                <input id="newsletter-name" name="newsletter-name" type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
                             </div>
                             <div>
                                 <label for="newsletter-email" class="block text-sm font-semibold text-gray-700">Email</label>
-                                <input id="newsletter-email" type="email" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com">
+                                <input id="newsletter-email" name="newsletter-email" type="email" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com">
                             </div>
                             <button type="submit" class="w-full inline-flex justify-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-500 transition">Subscribe</button>
                         </form>
@@ -244,15 +244,15 @@
                 <form class="bg-white rounded-3xl shadow-xl p-8 space-y-5 border border-gray-200">
                     <div>
                         <label for="name" class="block text-sm font-bold text-gray-700 mb-1">Name</label>
-                        <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
+                        <input type="text" id="name" name="contact-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-bold text-gray-700 mb-1">Email</label>
-                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Email">
+                        <input type="email" id="email" name="contact-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Email">
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-bold text-gray-700 mb-1">Message</label>
-                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Tell us about your project"></textarea>
+                        <textarea id="message" name="contact-message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Tell us about your project"></textarea>
                     </div>
                     <button type="submit" class="w-full inline-flex justify-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-500 transition">Send Message</button>
                 </form>

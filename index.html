@@ -1,71 +1,274 @@
- <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vox Librorum</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-900">
-    <header class="bg-blue-900 text-white py-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center px-6">
-            <h1 class="text-3xl font-bold">Vox Librorum</h1>
-            <nav>
-                <a href="#about" class="text-lg mx-3 hover:underline">About</a>
-                <a href="#archive" class="text-lg mx-3 hover:underline">Archive</a>
-                <a href="#oral-history" class="text-lg mx-3 hover:underline">Oral History</a>
-                <a href="#contact" class="text-lg mx-3 hover:underline">Contact</a>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 text-white shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-6 py-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white bg-opacity-10 rounded-full p-3">
+                    <svg class="h-8 w-8 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7m3.5-4.5A2.5 2.5 0 0117 12a2.5 2.5 0 012.5 2.5v3a2.5 2.5 0 01-2.5 2.5h-2a2.5 2.5 0 01-2.5-2.5v-3z" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-wide">Vox Librorum</h1>
+            </div>
+            <nav class="mt-4 md:mt-0 space-x-4 font-medium">
+                <a href="#about" class="hover:text-yellow-200 transition">About</a>
+                <a href="#archive" class="hover:text-yellow-200 transition">Archive</a>
+                <a href="#oral-history" class="hover:text-yellow-200 transition">Oral History</a>
+                <a href="#voices" class="hover:text-yellow-200 transition">Voices</a>
+                <a href="#contact" class="hover:text-yellow-200 transition">Contact</a>
             </nav>
         </div>
     </header>
 
-    <main class="container mx-auto py-8 px-6">
-        <section id="about" class="my-8">
-            <h2 class="text-2xl font-bold mb-4">About Vox Librorum</h2>
-            <p class="text-lg leading-relaxed">
-                Welcome to Vox Librorum, "The Voice of Books." Our mission is to preserve, share, and make antiquarian 
-                literature accessible to all. Explore our growing collection of historical texts, research archives, and 
-                translation tools, as well as our expanding oral history project.
-            </p>
-        </section>
-
-        <section id="archive" class="my-8">
-            <h2 class="text-2xl font-bold mb-4">Digital Archive</h2>
-            <p class="text-lg leading-relaxed">Discover and explore historical texts and manuscripts from around the world.</p>
-            <div class="bg-white shadow-md rounded-lg p-6 mt-4">
-                <p class="text-gray-600">This section will feature searchable and downloadable documents.</p>
+    <main>
+        <section class="relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-800 to-indigo-900">
+                <div class="absolute inset-0 opacity-20 mix-blend-soft-light" style="background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 0, rgba(255,255,255,0) 60%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.25) 0, rgba(255,255,255,0) 55%);"></div>
+            </div>
+            <div class="relative container mx-auto px-6 py-20 md:py-32 text-white">
+                <div class="max-w-2xl">
+                    <p class="uppercase tracking-[0.35em] text-sm text-yellow-200">The Voice of Books</p>
+                    <h2 class="mt-6 text-4xl md:text-5xl font-extrabold leading-tight">Where every volume finds its voice and every voice preserves a volume.</h2>
+                    <p class="mt-6 text-lg md:text-xl text-indigo-100">
+                        Vox Librorum is a living chorus of rare manuscripts, resonant oral histories, and collective memory. Join us as we amplify the whispers of the archive into the soundscape of today.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                        <a href="#archive" class="inline-flex items-center justify-center px-6 py-3 bg-yellow-300 text-gray-900 font-semibold rounded-lg shadow hover:bg-yellow-200 transition">
+                            Explore the Archive
+                        </a>
+                        <a href="#contact" class="inline-flex items-center justify-center px-6 py-3 border border-white/70 font-semibold rounded-lg hover:bg-white/10 transition">
+                            Add Your Voice
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="oral-history" class="my-8">
-            <h2 class="text-2xl font-bold mb-4">Oral History Collection</h2>
-            <p class="text-lg leading-relaxed">Preserving the voices of individuals through recorded oral histories. Explore life stories from diverse perspectives or contribute your own.</p>
-            <div class="bg-white shadow-md rounded-lg p-6 mt-4">
-                <p class="text-gray-600">This section will allow users to listen to or submit oral histories for preservation.</p>
+        <section id="about" class="container mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold mb-4">About Vox Librorum</h3>
+                    <p class="text-lg leading-relaxed text-gray-700">
+                        "Vox Librorum" translates to "The Voice of Books." We are a collective of archivists, translators, and storytellers committed to giving rare texts and overlooked narratives a resonant future. Our digital scriptorium welcomes scholars, curious readers, and community historians alike.
+                    </p>
+                    <p class="mt-4 text-lg leading-relaxed text-gray-700">
+                        Through meticulous preservation, contextual storytelling, and collaborative translation, we ensure that fragile pages and fleeting spoken histories continue to speak across generations.
+                    </p>
+                </div>
+                <div class="bg-white shadow-xl rounded-2xl p-8 border border-indigo-100">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3">Our guiding pillars</h4>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-2xl">📚</span>
+                            <span><strong>Stewardship:</strong> Preserve and digitize texts before they are lost to time.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-2xl">🔊</span>
+                            <span><strong>Amplification:</strong> Elevate narratives through translation, annotation, and oral storytelling.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-2xl">🤝</span>
+                            <span><strong>Community:</strong> Invite readers, researchers, and families to participate in the chorus.</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <section id="contact" class="my-8">
-            <h2 class="text-2xl font-bold mb-4">Get in Touch</h2>
-            <form class="bg-white shadow-md rounded-lg p-6">
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-bold mb-2">Name</label>
-                    <input type="text" id="name" class="w-full px-3 py-2 border rounded-lg" placeholder="Your Name">
+        <section id="archive" class="bg-white">
+            <div class="container mx-auto px-6 py-16">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+                    <div>
+                        <p class="uppercase text-sm tracking-widest text-indigo-500">Digital Archive</p>
+                        <h3 class="text-3xl font-bold mt-2">Discover the shelves that speak</h3>
+                    </div>
+                    <a href="#contact" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-500 transition">
+                        Request Access
+                    </a>
                 </div>
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-bold mb-2">Email</label>
-                    <input type="email" id="email" class="w-full px-3 py-2 border rounded-lg" placeholder="Your Email">
+                <div class="grid gap-8 md:grid-cols-3">
+                    <article class="bg-gray-50 rounded-xl shadow p-6 border border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-800">Illuminated Manuscripts</h4>
+                        <p class="mt-3 text-gray-600">High-resolution folios paired with translators' notes and pronunciation guides that let you hear the Latin and Greek marginalia.</p>
+                    </article>
+                    <article class="bg-gray-50 rounded-xl shadow p-6 border border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-800">Resonant Periodicals</h4>
+                        <p class="mt-3 text-gray-600">Digitized abolitionist newspapers, feminist pamphlets, and multilingual periodicals with audio companions that revive the cadence of their speeches.</p>
+                    </article>
+                    <article class="bg-gray-50 rounded-xl shadow p-6 border border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-800">Scholars' Margins</h4>
+                        <p class="mt-3 text-gray-600">Interactive annotations and marginalia indexing to trace debates across centuries and geographies.</p>
+                    </article>
                 </div>
-                <div class="mb-4">
-                    <label for="message" class="block text-sm font-bold mb-2">Message</label>
-                    <textarea id="message" rows="4" class="w-full px-3 py-2 border rounded-lg" placeholder="Your Message"></textarea>
+            </div>
+        </section>
+
+        <section id="oral-history" class="bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white">
+            <div class="container mx-auto px-6 py-16">
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <p class="uppercase text-sm tracking-[0.35em] text-yellow-200">Oral History Studio</p>
+                        <h3 class="text-3xl font-bold mt-4">Listening to the guardians of memory</h3>
+                        <p class="mt-5 text-indigo-100">Our oral history project gathers the voices of bibliophiles, bookbinders, translators, and families who safeguard private collections. Each story is paired with transcripts and contextual essays.</p>
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                            <div class="bg-white/10 rounded-xl p-4">
+                                <p class="text-sm uppercase tracking-widest text-yellow-200">Featured voice</p>
+                                <h4 class="text-lg font-semibold">Elena García</h4>
+                                <p class="text-sm text-indigo-100">On translating Civil War letters for a new generation of readers.</p>
+                            </div>
+                            <div class="bg-white/10 rounded-xl p-4">
+                                <p class="text-sm uppercase tracking-widest text-yellow-200">New arrival</p>
+                                <h4 class="text-lg font-semibold">The Bindery Sessions</h4>
+                                <p class="text-sm text-indigo-100">Field recordings from artisanal binderies keeping craft traditions alive.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white text-gray-900 rounded-3xl shadow-xl p-8 space-y-4">
+                        <h4 class="text-xl font-semibold">Behind the scenes</h4>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start space-x-3">
+                                <span class="text-indigo-600 mt-1">&#9679;</span>
+                                <span>Acoustic restoration removes hiss and surface noise from fragile reels.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="text-indigo-600 mt-1">&#9679;</span>
+                                <span>Multilingual transcripts with phonetic glossaries invite global listeners.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="text-indigo-600 mt-1">&#9679;</span>
+                                <span>Community workshops teach families how to record and donate oral histories.</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="inline-flex items-center px-5 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-500 transition">Nominate a storyteller</a>
+                    </div>
                 </div>
-                <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Send</button>
-            </form>
+            </div>
+        </section>
+
+        <section id="voices" class="container mx-auto px-6 py-16">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-1">
+                    <p class="uppercase text-sm tracking-widest text-indigo-500">Chorus of Readers</p>
+                    <h3 class="text-3xl font-bold mt-2">Echoes from the stacks</h3>
+                    <p class="mt-4 text-lg text-gray-700">Selections from our community show how literature resonates in new contexts and mediums.</p>
+                </div>
+                <div class="lg:col-span-2 grid md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+                        <p class="text-sm uppercase tracking-widest text-indigo-500">Listening Guide</p>
+                        <h4 class="text-xl font-semibold mt-2">Soundmarks of the Renaissance</h4>
+                        <p class="mt-3 text-gray-600">Follow our curated playlist of readings from 15th-century humanist letters, performed by linguists who restore their classical pronunciation.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+                        <p class="text-sm uppercase tracking-widest text-indigo-500">Reader's Reflection</p>
+                        <h4 class="text-xl font-semibold mt-2">A diary speaks again</h4>
+                        <p class="mt-3 text-gray-600">"Hearing my great-grandmother's 1912 journal recited in her own dialect felt like she was in the room." – Maya Li</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+                        <p class="text-sm uppercase tracking-widest text-indigo-500">Translation in Progress</p>
+                        <h4 class="text-xl font-semibold mt-2">Letters from the Moorish Library</h4>
+                        <p class="mt-3 text-gray-600">Volunteer translators collaborate in real time to render Ladino manuscripts, exchanging voice notes to refine tone.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+                        <p class="text-sm uppercase tracking-widest text-indigo-500">Community Highlight</p>
+                        <h4 class="text-xl font-semibold mt-2">Syllable Studios Youth Lab</h4>
+                        <p class="mt-3 text-gray-600">Teens remix public-domain poetry into spoken-word performances that travel from classrooms to podcasts.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray-900">
+            <div class="container mx-auto px-6 py-16">
+                <div class="grid lg:grid-cols-2 gap-12 items-center text-white">
+                    <div>
+                        <h3 class="text-3xl font-bold">Curator's spotlight</h3>
+                        <p class="mt-4 text-lg text-gray-200">Each quarter we showcase a resonance pairing—a digitized text with a contemporary response.</p>
+                        <ul class="mt-6 space-y-4">
+                            <li class="bg-white/10 rounded-xl p-5">
+                                <h4 class="text-xl font-semibold">Codex Vox</h4>
+                                <p class="text-gray-200">A 1532 herbal manuscript accompanied by a modern audio essay on ancestral healing practices.</p>
+                            </li>
+                            <li class="bg-white/10 rounded-xl p-5">
+                                <h4 class="text-xl font-semibold">Letters Across the Atlantic</h4>
+                                <p class="text-gray-200">A bilingual bundle of immigrant letters paired with a choral reading by descendants.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white text-gray-900 rounded-3xl shadow-xl p-8">
+                        <h4 class="text-xl font-semibold">Newsletter: Resonantia</h4>
+                        <p class="mt-2 text-gray-600">Sign up to receive restoration notes, curator interviews, and invitations to live listening salons.</p>
+                        <form class="mt-6 space-y-4">
+                            <div>
+                                <label for="newsletter-name" class="block text-sm font-semibold text-gray-700">Name</label>
+                                <input id="newsletter-name" type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="newsletter-email" class="block text-sm font-semibold text-gray-700">Email</label>
+                                <input id="newsletter-email" type="email" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com">
+                            </div>
+                            <button type="submit" class="w-full inline-flex justify-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-500 transition">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="container mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <p class="uppercase text-sm tracking-widest text-indigo-500">Connect</p>
+                    <h3 class="text-3xl font-bold mt-2">Let your voice join the library</h3>
+                    <p class="mt-4 text-lg text-gray-700">Whether you steward a private collection, have recordings to share, or want to volunteer, we would love to hear from you.</p>
+                    <div class="mt-6 space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-indigo-600 mt-1">&#9679;</span>
+                            <span>Partner with us on preservation or translation initiatives.</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-indigo-600 mt-1">&#9679;</span>
+                            <span>Propose an oral history interview or community workshop.</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-indigo-600 mt-1">&#9679;</span>
+                            <span>Invite us to speak at your library, classroom, or cultural center.</span>
+                        </div>
+                    </div>
+                </div>
+                <form class="bg-white rounded-3xl shadow-xl p-8 space-y-5 border border-gray-200">
+                    <div>
+                        <label for="name" class="block text-sm font-bold text-gray-700 mb-1">Name</label>
+                        <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Email">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-bold text-gray-700 mb-1">Message</label>
+                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Tell us about your project"></textarea>
+                    </div>
+                    <button type="submit" class="w-full inline-flex justify-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-500 transition">Send Message</button>
+                </form>
+            </div>
         </section>
     </main>
 
-    <footer class="bg-blue-900 text-white py-4 text-center">
-        <p>&copy; 2025 Vox Librorum. All rights reserved.</p>
+    <footer class="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p class="text-sm">&copy; 2025 Vox Librorum. All rights reserved.</p>
+            <div class="flex space-x-4 text-sm">
+                <a href="#" class="hover:text-yellow-200 transition">Access Statement</a>
+                <a href="#" class="hover:text-yellow-200 transition">Press Kit</a>
+                <a href="#" class="hover:text-yellow-200 transition">Support Vox Librorum</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

@@ -18,6 +18,14 @@ app.use('/data', (req, res) => {
 });
 
 app.use((req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
+  if (req.method === 'GET' && req.accepts('html')) {
+    return res.sendFile(indexPath);
+  }
+
   res.status(404).send('Not Found');
 });
 

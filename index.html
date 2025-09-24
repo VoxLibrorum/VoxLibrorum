@@ -674,12 +674,17 @@
         }
 
         [data-animate] {
-            opacity: 0;
-            transform: translateY(45px);
+            opacity: 1;
+            transform: none;
             transition: opacity 0.9s ease, transform 0.9s ease;
         }
 
-        [data-animate].is-visible {
+        .js-enabled [data-animate] {
+            opacity: 0;
+            transform: translateY(45px);
+        }
+
+        .js-enabled [data-animate].is-visible {
             opacity: 1;
             transform: translateY(0);
         }

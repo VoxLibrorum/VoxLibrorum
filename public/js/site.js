@@ -1,5 +1,29 @@
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
+    const animatedElements = document.querySelectorAll('[data-animate]');
+
+    if (animatedElements.length > 0) {
+      if ('IntersectionObserver' in window) {
+        document.body.classList.add('js-enabled');
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.25 });
+
+        animatedElements.forEach((element) => {
+          observer.observe(element);
+        });
+      } else {
+        animatedElements.forEach((element) => {
+          element.classList.add('is-visible');
+        });
+      }
+    }
+
     const emberField = document.querySelector('#ember-field');
     if (emberField) {
       const emberCount = window.innerWidth < 768 ? 35 : 70;
@@ -25,19 +49,6 @@
         const translateY = y * intensity * -24;
         item.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
       });
-    });
-
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.25 });
-
-    document.querySelectorAll('[data-animate]').forEach((element) => {
-      observer.observe(element);
     });
 
     const progressBar = document.querySelector('.scroll-progress-bar');

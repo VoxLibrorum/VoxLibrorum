@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const indexPath = path.join(__dirname, 'index.html');
+const publicPath = path.join(__dirname, 'public');
 
 app.disable('x-powered-by');
 
@@ -29,6 +30,8 @@ app.use(
     crossOriginEmbedderPolicy: false,
   })
 );
+
+app.use('/js', express.static(path.join(publicPath, 'js')));
 
 function sendIndex(request, response, next) {
   response.setHeader('Cache-Control', 'no-store');

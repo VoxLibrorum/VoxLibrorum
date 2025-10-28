@@ -353,6 +353,13 @@
             opacity: 0;
         }
 
+        #ember-field.is-reduced-motion span {
+            bottom: auto;
+            animation: none;
+            opacity: 0.45;
+            filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.35));
+        }
+
         @keyframes ember-rise {
             0% {
                 transform: translate3d(0, 0, 0) scale(0.6);
@@ -692,13 +699,16 @@
         @media (prefers-reduced-motion: reduce) {
             .parallax-item,
             [data-animate],
-            #ember-field span,
             .btn-primary,
             .btn-secondary,
             .glow-card {
                 transition: none !important;
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
+            }
+
+            #ember-field span {
+                animation: none !important;
             }
         }
     </style>

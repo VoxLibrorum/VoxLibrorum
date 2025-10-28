@@ -26,17 +26,61 @@
 
     const emberField = document.querySelector('#ember-field');
     if (emberField) {
-      const emberCount = window.innerWidth < 768 ? 35 : 70;
-      for (let i = 0; i < emberCount; i += 1) {
-        const ember = document.createElement('span');
-        ember.style.left = `${Math.random() * 100}%`;
-        ember.style.animationDelay = `${Math.random() * -24}s`;
-        ember.style.animationDuration = `${12 + Math.random() * 14}s`;
-        ember.style.opacity = `${0.3 + Math.random() * 0.6}`;
-        const scale = 0.4 + Math.random() * 1.3;
-        ember.style.transform = `scale(${scale})`;
-        emberField.appendChild(ember);
+      const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      const populateEmbers = () => {
+        const emberCount = window.innerWidth < 768 ? 35 : 70;
+        const prefersReducedMotion = reduceMotionQuery.matches;
+
+        emberField.innerHTML = '';
+        emberField.classList.toggle('is-reduced-motion', prefersReducedMotion);
+
+        for (let i = 0; i < emberCount; i += 1) {
+          const ember = document.createElement('span');
+          const scale = 0.4 + Math.random() * 1.3;
+          const baseOpacity = prefersReducedMotion ? 0.2 : 0.3;
+
+          ember.style.left = `${Math.random() * 100}%`;
+          ember.style.transform = `scale(${scale})`;
+          ember.style.opacity = `${baseOpacity + Math.random() * 0.5}`;
+
+          if (prefersReducedMotion) {
+            ember.style.bottom = 'auto';
+            ember.style.top = `${Math.random() * 90}%`;
+          } else {
+            ember.style.top = '';
+            ember.style.bottom = '';
+            ember.style.animationDelay = `${Math.random() * -24}s`;
+            ember.style.animationDuration = `${12 + Math.random() * 14}s`;
+          }
+
+          emberField.appendChild(ember);
+        }
+      };
+
+      populateEmbers();
+
+      const handleMotionChange = () => {
+        populateEmbers();
+      };
+
+      if (typeof reduceMotionQuery.addEventListener === 'function') {
+        reduceMotionQuery.addEventListener('change', handleMotionChange);
+      } else if (typeof reduceMotionQuery.addListener === 'function') {
+        reduceMotionQuery.addListener(handleMotionChange);
       }
+
+      let emberResizeFrame = null;
+      window.addEventListener('resize', () => {
+        if (emberResizeFrame) {
+          cancelAnimationFrame(emberResizeFrame);
+        }
+
+        emberResizeFrame = window.requestAnimationFrame(() => {
+          populateEmbers();
+          emberResizeFrame = null;
+        });
+      });
     }
 
     const parallaxItems = document.querySelectorAll('[data-parallax]');

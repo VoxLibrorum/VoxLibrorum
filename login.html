@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restricted Access | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #02040a;
+            color: #f8f7f4;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+        }
+
+        .bg-gate {
+            position: fixed;
+            inset: 0;
+            background-image: url('public/img/gate.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            filter: blur(8px) grayscale(40%);
+            z-index: -1;
+            transform: scale(1.1);
+            /* Slight zoom for parallax feel */
+        }
+
+        .login-panel {
+            background: rgba(5, 7, 10, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 3rem 4rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .brand-mark {
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        input[type="password"] {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 0;
+            width: 100%;
+            text-align: center;
+            color: var(--amber);
+            /* We'll mock this color since style.css isn't linked for simplicity of single file, actually I'll link it */
+            color: #f97316;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.2em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="password"]:focus {
+            border-color: #f97316;
+        }
+
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: normal;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            height: 1rem;
+        }
+
+        .back-link {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #f97316;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-gate"></div>
+
+    <div class="login-panel">
+        <div class="brand-mark">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="#f97316" stroke-width="1.6"
+                    fill="rgba(255,255,255,0.03)" />
+                <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <h1 class="text-xs uppercase tracking-[0.3em] text-white/50 mb-8">Security Checkpoint</h1>
+
+        <form id="gateForm">
+            <input type="password" id="passkey" placeholder="Enter Passkey" autocomplete="off" autofocus>
+            <div class="error-msg" id="errorMsg">Access Denied</div>
+        </form>
+    </div>
+
+    <a href="index.html" class="back-link">Return to Public Archive</a>
+
+    <script>
+        const form = document.getElementById('gateForm');
+        const input = document.getElementById('passkey');
+        const errorMsg = document.getElementById('errorMsg');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = input.value.trim().toUpperCase();
+
+            if (val === 'EMBER' || val === 'NOVA') {
+                // Success
+                input.style.color = '#34d399'; // Green
+                input.blur();
+                errorMsg.style.color = '#34d399';
+                errorMsg.innerText = 'Access Granted';
+                errorMsg.style.opacity = '1';
+
+                setTimeout(() => {
+                    window.location.href = 'desk/index.html';
+                }, 800);
+            } else {
+                // Fail
+                errorMsg.style.color = '#ef4444';
+                errorMsg.innerText = 'Incorrect Passkey';
+                errorMsg.style.opacity = '1';
+                input.value = '';
+
+                // Shake effect
+                form.style.transform = 'translateX(5px)';
+                setTimeout(() => form.style.transform = 'translateX(-5px)', 50);
+                setTimeout(() => form.style.transform = 'translateX(5px)', 100);
+                setTimeout(() => form.style.transform = 'translateX(0)', 150);
+            }
+        });
+
+        // Clear error on type
+        input.addEventListener('input', () => {
+            errorMsg.style.opacity = '0';
+        });
+    </script>
+</body>
+
+</html>

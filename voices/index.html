@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voices | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        /* Engraving/Grain Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.6;
+            mix-blend-mode: overlay;
+        }
+
+        .masonry-grid {
+            columns: 1;
+            column-gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .masonry-grid {
+                columns: 2;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                columns: 3;
+            }
+        }
+
+        .voice-dossier {
+            background: rgba(13, 16, 32, 0.85);
+            border: 1px solid rgba(248, 247, 244, 0.1);
+            border-radius: 4px;
+            /* Sharper corners like a file */
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            break-inside: avoid;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* The "Threshold" Arch effect on cards */
+        .voice-dossier::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(249, 115, 22, 0.0);
+            border-radius: 4px;
+            pointer-events: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .voice-dossier:hover {
+            transform: translateY(-5px);
+            border-color: rgba(249, 115, 22, 0.3);
+            background: rgba(20, 24, 45, 0.9);
+        }
+
+        .voice-role {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(249, 115, 22, 0.8);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .voice-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--mist);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .voice-bio {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: rgba(248, 247, 244, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1rem;
+        }
+
+        .archivist-badge {
+            position: absolute;
+            top: -10px;
+            right: 1.5rem;
+            background: var(--night);
+            border: 1px solid var(--ember);
+            color: var(--ember);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="brand-mark block">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
+                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4"
+                            stroke-linecap="round" />
+                        <circle cx="24" cy="24" r="20" stroke="rgba(148,163,255,0.4)" stroke-width="1" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-semibold tracking-wide"><a href="../index.html">Vox Librorum</a>
+                    </h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-3">
+                <a class="nav-link" href="../index.html">Home</a>
+                <a class="nav-link" href="../index.html#archive">Archive</a>
+                <a class="nav-link" href="../oral-histories/index.html">Oral History</a>
+                <a class="nav-link" href="index.html"
+                    style="color: var(--mist); border-bottom: 1px solid var(--ember);">Voices</a>
+                <a class="nav-link" href="../index.html#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="min-h-screen">
+        <!-- Hero Section -->
+        <section class="section pt-32 pb-20 relative" data-tone="deep">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-3xl" data-animate>
+                    <p class="uppercase tracking-[0.45em] text-xs text-amber-200/70 mb-4">The Keepers & The Lost</p>
+                    <h2 class="hero-headline mb-8">The Assembly of Voices</h2>
+                    <blockquote
+                        class="text-xl md:text-2xl text-white/50 border-l-2 border-amber-500/50 pl-6 italic font-serif">
+                        "To cross the threshold is to admit that you are not the same person who stood outside."
+                    </blockquote>
+                </div>
+            </div>
+            <!-- Subtle background ash effect provided by global site.js/css -->
+            <div id="ember-field" aria-hidden="true"></div>
+        </section>
+
+        <!-- Filters (Minimal) -->
+        <div class="container mx-auto px-6 mb-12 relative z-20" data-animate>
+            <div class="flex gap-4 border-b border-white/10 pb-4 overflow-x-auto">
+                <button class="text-sm uppercase tracking-widest text-amber-500 font-bold">All Voices</button>
+                <button
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Archivists</button>
+                <button
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Scholars</button>
+                <button
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Witnesses</button>
+            </div>
+        </div>
+
+        <!-- Masonry Grid -->
+        <section class="section pb-32 pt-0">
+            <div class="container mx-auto px-6">
+                <div class="masonry-grid" id="voicesGrid">
+
+                    <!-- Archivist Card (Featured) -->
+                    <div class="voice-dossier">
+                        <span class="archivist-badge">Head Archivist</span>
+                        <span class="voice-role">Custodian of the Ember Vault</span>
+                        <h3 class="voice-name">Elara Vance</h3>
+                        <div class="voice-bio">
+                            <p>Specializes in the recovery of manuscripts damaged by salt water. Elara has spent the
+                                last decade cataloging the "Drowned Library" collection. Rumored to hold the only known
+                                key to the Lower Sanctum.</p>
+                        </div>
+                    </div>
+
+                    <!-- Voice Card -->
+                    <div class="voice-dossier">
+                        <span class="voice-role">Witness • Maritime</span>
+                        <h3 class="voice-name">Elias Thorne</h3>
+                        <div class="voice-bio">
+                            <p>Former keeper of the Blackwood Lighthouse. His testimony regarding the "Purple Fog"
+                                phenomena of 1994 remains one of the most cited accounts in the oral history collection.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Voice Card -->
+                    <div class="voice-dossier">
+                        <span class="voice-role">Scholar • Architecture</span>
+                        <h3 class="voice-name">Dr. Aris Vane</h3>
+                        <div class="voice-bio">
+                            <p>A structural historian obsessed with "impossible geometries" in 18th-century cloisters.
+                                Currently leading the restoration project at St. Jude, where the Echo Chamber was
+                                discovered.</p>
+                        </div>
+                    </div>
+
+                    <!-- Voice Card -->
+                    <div class="voice-dossier">
+                        <span class="voice-role">Traveler</span>
+                        <h3 class="voice-name">Kaelen Oroy</h3>
+                        <div class="voice-bio">
+                            <p>A cartographer of "shadow paths." Kaelen claims to have walked the road depicted in the
+                                "Burning Ship" engraving, though no map shows its existence. Contributes rough sketches
+                                and charcoal rubbings.</p>
+                        </div>
+                    </div>
+
+                    <!-- Voice Card -->
+                    <div class="voice-dossier">
+                        <span class="voice-role">Contributor</span>
+                        <h3 class="voice-name">Anonymous (User #892)</h3>
+                        <div class="voice-bio">
+                            <p>Submitted a collection of letters found in an attic in Vienna. The letters describe a
+                                city that overlaps with the real one, visible only at twilight.</p>
+                        </div>
+                    </div>
+
+                    <!-- Voice Card -->
+                    <div class="voice-dossier">
+                        <span class="voice-role">Archivist</span>
+                        <h3 class="voice-name">Julian Black</h3>
+                        <div class="voice-bio">
+                            <p>Focuses on acoustic archaeology. Julian digitizes the "silent" tapes—recordings of empty
+                                rooms that contain unexplained resonances.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-auto border-t border-amber-500/10 bg-[#02040a] py-12">
+        <div class="container mx-auto px-6 text-center flex flex-col gap-4">
+            <p class="text-white/20 text-xs uppercase tracking-[0.2em]">Vox Librorum • Est. 2025</p>
+            <a href="../login.html"
+                class="text-xs text-amber-500/30 hover:text-amber-500 transition-colors uppercase tracking-widest">Scholar
+                Login</a>
+        </div>
+    </footer>
+
+    <script src="../public/js/site.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oral Histories | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        /* Specific overrides for this page if needed */
+        .search-container {
+            position: relative;
+            max-width: 40rem;
+            margin: -3rem auto 4rem;
+            /* Overlap hero slightly */
+            z-index: 20;
+        }
+
+        .filter-chip {
+            background: rgba(248, 247, 244, 0.05);
+            border: 1px solid rgba(248, 247, 244, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(248, 247, 244, 0.6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: rgba(249, 115, 22, 0.4);
+            color: var(--mist);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.15);
+        }
+
+        .story-status {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .story-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="brand-mark block">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
+                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4"
+                            stroke-linecap="round" />
+                        <circle cx="24" cy="24" r="20" stroke="rgba(148,163,255,0.4)" stroke-width="1" />
+                    </svg>
+                </a>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.38em] text-amber-200/70">The Resonant Archive</p>
+                    <h1 class="text-2xl md:text-3xl font-semibold tracking-wide"><a href="../index.html">Vox
+                            Librorum</a></h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-3">
+                <a class="nav-link" href="../index.html">Home</a>
+                <a class="nav-link" href="../index.html#archive">Archive</a>
+                <a class="nav-link" href="index.html"
+                    style="color: var(--mist); border-bottom: 1px solid var(--ember);">Oral
+                    History</a>
+                <a class="nav-link" href="../voices/index.html">Voices</a>
+                <a class="nav-link" href="../index.html#contact">Contact</a>
+            </nav>
+        </div>
+        <div class="scroll-progress" aria-hidden="true">
+            <div class="scroll-progress-bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="section pt-32 pb-20 overflow-hidden relative" data-tone="shore">
+            <div id="ember-field" aria-hidden="true"></div>
+
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div data-animate>
+                    <p class="uppercase tracking-[0.45em] text-xs text-amber-200/70 mb-4">Living Memories</p>
+                    <h2 class="hero-headline mb-6">The Oral Histories</h2>
+                    <p class="hero-description mx-auto">
+                        Stories reclaimed from the silence. Listen to the voices of scholars, travelers, and witnesses
+                        who have touched the edges of the unknown.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search & Filter -->
+        <div class="container mx-auto px-6 relative z-20">
+            <div class="search-container glass-panel" data-animate>
+                <div class="flex flex-col gap-4">
+                    <div class="field">
+                        <input type="text" id="searchInput" placeholder="Search by title, contributor, or era..."
+                            aria-label="Search stories">
+                        <svg class="absolute right-4 top-3.5 w-5 h-5 text-gray-500 pointer-events-none" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex flex-wrap gap-2 justify-center" id="filterContainer">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="maritime">Maritime</button>
+                        <button class="filter-chip" data-filter="cloisters">Cloisters</button>
+                        <button class="filter-chip" data-filter="modern">Modern Era</button>
+                        <button class="filter-chip" data-filter="mystery">Mystery</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stories Grid -->
+        <section class="section pb-32">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="text-xl font-serif text-white/80">Latest Collections</h3>
+                    <span class="text-sm text-amber-500/80 uppercase tracking-widest" id="storyCount">0 Stories
+                        Found</span>
+                </div>
+
+                <div class="glow-grid" id="storiesGrid">
+                    <!-- Stories will be injected here via JS -->
+                </div>
+
+                <div class="mt-16 text-center">
+                    <p class="text-white/40 mb-4 text-sm">Have a story to add to the archive?</p>
+                    <a href="submit.html" class="btn-secondary">Submit Your Testimony</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container mx-auto px-6 grid md:grid-cols-4 gap-12">
+            <div class="md:col-span-2">
+                <span class="brand-mark mb-6">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" />
+                    </svg>
+                </span>
+                <p class="text-sm text-gray-400 leading-relaxed max-w-sm">
+                    Vox Librorum is a non-profit digital preservation initiative dedicated to recovering, translating,
+                    and illuminating lost manuscripts and oral histories from the edge of memory.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-6">Explore</h5>
+                <nav class="footer-links flex flex-col gap-3">
+                    <a href="../index.html">Home</a>
+                    <a href="../index.html#archive">The Archive</a>
+                    <a href="#">Oral Histories</a>
+                    <a href="../index.html#voices">Voices</a>
+                </nav>
+            </div>
+            <div>
+                <h5 class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-6">Connect</h5>
+                <nav class="footer-links flex flex-col gap-3">
+                    <a href="../index.html#contact">Contact</a>
+                    <a href="#">Support the Mission</a>
+                    <a href="../login.html">Scholar Login</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../public/js/site.js"></script>
+    <script>
+        // Placeholder Data for Oral Histories
+        const stories = [
+            {
+                id: 1,
+                title: "The Lighthouse Keeper's Confession",
+                contributor: "Elias Thorne",
+                summary: "Startling accounts of strange lights seen from the Blackwood Lighthouse during the storm of '94, distinct from any known vessel.",
+                tags: ["maritime", "mystery", "1994"],
+                era: "Late 20th Century",
+                location: "Blackwood Coast",
+                status: "public"
+            },
+            {
+                id: 2,
+                title: "Whispers of the Old Market",
+                contributor: "Sarah Chen",
+                summary: "An oral tradition passed down through three generations of stall owners regarding the 'midnight trades' that supposedly occur on the new moon.",
+                tags: ["modern", "urban", "folklore"],
+                era: "Contemporary",
+                location: "New Veridia",
+                status: "public"
+            },
+            {
+                id: 3,
+                title: "The Sunken Bell",
+                contributor: "Capt. H. Sterling",
+                summary: "A retrieved logbook entry read aloud, detailing the discovery of a bronze bell four miles off the coast, inscribed with an unknown language.",
+                tags: ["maritime", "artifact", "mystery"],
+                era: "1920s",
+                location: "North Sea",
+                status: "public"
+            },
+            {
+                id: 4,
+                title: "Echoes of the Cloisters",
+                contributor: "Dr. Aris Vane",
+                summary: "Architectural anomalies found during the restoration of the St. Jude Abbey, suggesting the building was constructed around something else.",
+                tags: ["cloisters", "architecture", "mystery"],
+                era: "18th Century",
+                location: "St. Jude",
+                status: "public"
+            },
+            {
+                id: 5,
+                title: "Letters from the Dust Bowl",
+                contributor: "Anonymous",
+                summary: "A series of letters read by a descendant, describing 'rain that tasted of ash' and figures walking in the dust storms.",
+                tags: ["history", "nature"],
+                era: "1930s",
+                location: "Midwest",
+                status: "public"
+            },
+            {
+                id: 6,
+                title: "The Silent Choir",
+                contributor: "M. Kovac",
+                summary: "An audio recording from 1982 that captured a choral performance in an empty cathedral.",
+                tags: ["mystery", "audio", "cloisters"],
+                era: "1980s",
+                location: "Vostok",
+                status: "public"
+            }
+        ];
+
+        // DOM Elements
+        const grid = document.getElementById('storiesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterContainer = document.getElementById('filterContainer');
+        const countLabel = document.getElementById('storyCount');
+
+        // Render Function
+        function renderStories(data) {
+            grid.innerHTML = '';
+            countLabel.textContent = `${data.length} Stor${data.length === 1 ? 'y' : 'ies'} Found`;
+
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 opacity-50">
+                        <p class="text-xl font-serif text-amber-200">No echoes found.</p>
+                        <p class="text-sm mt-2">Try adjusting your search terms.</p>
+                    </div>`;
+                return;
+            }
+
+            data.forEach((story, index) => {
+                // Staggered animation delay
+                const delay = index * 0.1;
+
+                const card = document.createElement('article');
+                card.className = 'glow-card flex flex-col h-full';
+                card.style.animationDelay = `${delay}s`;
+                // Add fade-in animation class if we had one, or just rely on global transitions
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="voice-tag text-amber-500/80 border-amber-500/20">${story.tags[0]}</span>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">${story.era}</span>
+                    </div>
+                    <h4 class="mb-2 text-xl leading-tight hover:text-amber-400 transition-colors cursor-pointer">
+                        <a href="story.html?id=${story.id}">${story.title}</a>
+                    </h4>
+                    <p class="text-sm text-gray-400 mb-6 flex-grow line-clamp-3">
+                        ${story.summary}
+                    </p>
+                    <div class="story-meta w-full">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs text-amber-500 font-bold border border-gray-600">
+                                ${story.contributor.charAt(0)}
+                            </div>
+                            <span class="text-white/60">${story.contributor}</span>
+                        </div>
+                        <a href="story.html?id=${story.id}" class="ml-auto text-xs opacity-50 hover:opacity-100 transition-opacity cursor-pointer text-white">
+                            Read ⟶
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter Logic
+        let activeFilter = 'all';
+
+        function filterStories() {
+            const query = searchInput.value.toLowerCase();
+
+            const filtered = stories.filter(story => {
+                const matchesSearch =
+                    story.title.toLowerCase().includes(query) ||
+                    story.contributor.toLowerCase().includes(query) ||
+                    story.summary.toLowerCase().includes(query);
+
+                const matchesFilter = activeFilter === 'all' || story.tags.includes(activeFilter);
+
+                return matchesSearch && matchesFilter;
+            });
+
+            renderStories(filtered);
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', filterStories);
+
+        filterContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-chip')) {
+                // Update UI
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Update Logic
+                activeFilter = e.target.dataset.filter;
+                filterStories();
+            }
+        });
+
+        // Initial Render
+        renderStories(stories);
+
+    </script>
+</body>
+
+</html>

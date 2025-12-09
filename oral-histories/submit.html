@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Testimony | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        .submit-container {
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(249, 115, 22, 0.3);
+            border-radius: 16px;
+            background: rgba(249, 115, 22, 0.05);
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover,
+        .upload-area.active {
+            border-color: rgba(249, 115, 22, 0.6);
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--ember);
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+            transform: scale(1.2);
+        }
+
+        /* Success Animation State */
+        .success-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 7, 18, 0.95);
+            backdrop-filter: blur(8px);
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 50;
+        }
+
+        .success-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="brand-mark block">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
+                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4"
+                            stroke-linecap="round" />
+                        <circle cx="24" cy="24" r="20" stroke="rgba(148,163,255,0.4)" stroke-width="1" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-semibold tracking-wide"><a href="../index.html">Vox Librorum</a>
+                    </h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-6">
+                <a href="index.html"
+                    class="text-sm uppercase tracking-widest text-white/60 hover:text-amber-500 transition-colors">⟵
+                    Cancel</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="min-h-screen relative">
+        <section class="section pt-20 pb-40">
+            <div id="ember-field" aria-hidden="true" style="opacity: 0.3;"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12" data-animate>
+                    <h2 class="hero-headline text-3xl md:text-4xl mb-4">Offer Your Voice</h2>
+                    <p class="text-white/60 max-w-lg mx-auto">
+                        The archive grows with every story shared. Whether it is a memory of a place that no longer
+                        exists,
+                        or a whisper from the margins of history, we are listening.
+                    </p>
+                </div>
+
+                <div class="submit-container glass-panel" data-animate style="transition-delay: 0.1s;">
+
+                    <div class="step-indicator">
+                        <div class="step-dot active"></div>
+                        <div class="step-dot"></div>
+                        <div class="step-dot"></div>
+                    </div>
+
+                    <form id="submissionForm" class="flex flex-col gap-6">
+                        <!-- Basic Info -->
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="field">
+                                <label for="storyTitle">Title of Testimony</label>
+                                <input type="text" id="storyTitle" placeholder="e.g. The Vanishing of Pier 4" required>
+                            </div>
+                            <div class="field">
+                                <label for="contributorName">Contributor Name</label>
+                                <input type="text" id="contributorName" placeholder="Or 'Anonymous'" required>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="field">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" placeholder="e.g. Vienna, 1922" required>
+                            </div>
+                            <div class="field">
+                                <label for="era">Era / Time Period</label>
+                                <input type="text" id="era" placeholder="e.g. Interwar Period">
+                            </div>
+                        </div>
+
+                        <!-- Story Content -->
+                        <div class="field">
+                            <label for="storyContent">Share your story</label>
+                            <textarea id="storyContent" rows="6"
+                                placeholder="Write your account here, or upload an audio file below..."
+                                required></textarea>
+                        </div>
+
+                        <!-- Upload Area -->
+                        <div class="field">
+                            <label>Audio Record (Optional)</label>
+                            <div class="upload-area" id="dropZone">
+                                <svg class="w-10 h-10 mx-auto text-amber-500 mb-3" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                                    </path>
+                                </svg>
+                                <p class="text-sm text-white/80 font-medium">Click to upload or drag audio file here</p>
+                                <p class="text-xs text-white/40 mt-1">MP3, WAV, or M4A (Max 50MB)</p>
+                                <input type="file" id="fileInput" class="hidden" accept="audio/*">
+                            </div>
+                            <div id="filePreview"
+                                class="hidden mt-3 p-3 bg-amber-500/10 rounded-lg flex items-center justify-between border border-amber-500/20">
+                                <span class="text-sm text-amber-200 truncate pr-4" id="fileName">recording.mp3</span>
+                                <button type="button" class="text-white/50 hover:text-white" id="removeFile">✕</button>
+                            </div>
+                        </div>
+
+                        <!-- Consent -->
+                        <div class="flex items-start gap-3 mt-2 p-4 bg-white/5 rounded-lg border border-white/5">
+                            <input type="checkbox" id="consent"
+                                class="mt-1 bg-transparent border-white/20 rounded accent-amber-500" required>
+                            <label for="consent" class="text-xs text-white/60 leading-relaxed cursor-pointer m-0">
+                                I verify that this story is my own or that I have permission to share it.
+                                I grant Vox Librorum the right to archive, adapt, and display this contribution
+                                as part of the public memory project.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full mt-2">
+                            Archive Testimony
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Overlay -->
+        <div class="success-overlay" id="successModal">
+            <div class="text-center p-8 max-w-md">
+                <div
+                    class="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(249,115,22,0.6)]">
+                    <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="hero-headline text-2xl mb-4">Voice Accepted</h3>
+                <p class="text-white/70 mb-8">
+                    Your testimony has been digitized and placed in the queue for archivist review.
+                    Thank you for keeping the memory alive.
+                </p>
+                <div class="flex flex-col gap-3">
+                    <a href="index.html" class="btn-secondary">Return to Archive</a>
+                    <a href="#" onclick="location.reload()"
+                        class="text-xs text-white/40 hover:text-white uppercase tracking-widest mt-4">Submit Another</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../public/js/site.js"></script>
+    <script>
+        // Form Interaction Logic
+        const form = document.getElementById('submissionForm');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const fileName = document.getElementById('fileName');
+        const removeFile = document.getElementById('removeFile');
+        const successModal = document.getElementById('successModal');
+
+        // Drag & Drop
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('active');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('active');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('active');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            fileName.textContent = file.name;
+            dropZone.classList.add('hidden');
+            filePreview.classList.remove('hidden');
+        }
+
+        removeFile.addEventListener('click', () => {
+            fileInput.value = '';
+            dropZone.classList.remove('hidden');
+            filePreview.classList.add('hidden');
+        });
+
+        // Mock Submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Visual loading state
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = 'Transmitting...';
+            btn.style.opacity = '0.7';
+
+            // Simulate API latency
+            setTimeout(() => {
+                successModal.classList.add('visible');
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

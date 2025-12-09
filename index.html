@@ -1,726 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vox Librorum</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --night: #050712;
-            --night-deep: #02040a;
-            --night-soft: #141927;
-            --ember: #f97316;
-            --ember-soft: rgba(249, 115, 22, 0.25);
-            --mist: #f8f7f4;
-            --mist-muted: rgba(248, 247, 244, 0.75);
-            --wave: rgba(30, 64, 175, 0.45);
-            --accent: rgba(185, 91, 255, 0.55);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top right, rgba(87, 82, 196, 0.28), transparent 45%),
-                        radial-gradient(circle at 15% 10%, rgba(249, 115, 22, 0.18), transparent 45%),
-                        linear-gradient(140deg, var(--night) 0%, var(--night-deep) 55%, #0a0f21 100%);
-            color: var(--mist);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        ::selection {
-            background: var(--ember);
-            color: var(--night);
-        }
-
-        a {
-            color: inherit;
-        }
-
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            backdrop-filter: blur(16px);
-            background: linear-gradient(120deg, rgba(5, 7, 18, 0.9), rgba(7, 11, 24, 0.8));
-            border-bottom: 1px solid rgba(249, 115, 22, 0.15);
-        }
-
-        .scroll-progress {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.05);
-            overflow: hidden;
-        }
-
-        .scroll-progress-bar {
-            height: 100%;
-            width: 100%;
-            transform-origin: left center;
-            transform: scaleX(0);
-            background: linear-gradient(90deg, rgba(249, 115, 22, 0.7), rgba(165, 180, 252, 0.85));
-        }
-
-        .brand-mark {
-            display: grid;
-            place-items: center;
-            width: 3rem;
-            height: 3rem;
-            border-radius: 9999px;
-            border: 1px solid rgba(249, 115, 22, 0.35);
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.28), rgba(5, 7, 18, 0.95));
-            box-shadow: 0 0 18px rgba(249, 115, 22, 0.22);
-        }
-
-        .brand-mark svg {
-            width: 1.75rem;
-            height: 1.75rem;
-        }
-
-        .nav-link {
-            position: relative;
-            padding: 0.5rem 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            color: rgba(248, 247, 244, 0.75);
-            transition: color 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -0.25rem;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(249, 115, 22, 0.9), rgba(244, 244, 245, 0.7));
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link:focus {
-            color: var(--mist);
-        }
-
-        .nav-link:hover::after,
-        .nav-link:focus::after {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        .hero {
-            position: relative;
-            padding-top: 6rem;
-            padding-bottom: 8rem;
-            overflow: hidden;
-            isolation: isolate;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.32), transparent 55%),
-                        radial-gradient(circle at 75% 10%, rgba(96, 165, 250, 0.25), transparent 65%),
-                        linear-gradient(180deg, rgba(3, 6, 17, 0.8), rgba(3, 7, 19, 0.95) 70%, rgba(8, 10, 23, 1));
-            opacity: 0.95;
-            z-index: -2;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: -20rem -10rem auto -10rem;
-            height: 60rem;
-            background: radial-gradient(circle at center, rgba(249, 115, 22, 0.08), transparent 60%);
-            filter: blur(0);
-            z-index: -1;
-        }
-
-        .hero-grid {
-            display: grid;
-            gap: 3rem;
-        }
-
-        @media (min-width: 1024px) {
-            .hero {
-                padding-top: 8rem;
-                padding-bottom: 10rem;
-            }
-
-            .hero-grid {
-                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-                align-items: center;
-            }
-        }
-
-        .hero-headline {
-            font-family: 'Cinzel', 'Inter', serif;
-            font-size: clamp(2.8rem, 4vw + 1rem, 4.8rem);
-            line-height: 1.1;
-            letter-spacing: 0.02em;
-            text-shadow: 0 0 30px rgba(249, 115, 22, 0.25);
-        }
-
-        .hero-description {
-            margin-top: 1.5rem;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: rgba(248, 247, 244, 0.8);
-            max-width: 36rem;
-        }
-
-        .hero-actions {
-            margin-top: 2.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            padding: 0.85rem 1.75rem;
-            border-radius: 999px;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(120deg, rgba(249, 115, 22, 0.9), rgba(255, 183, 77, 0.85));
-            color: var(--night);
-            box-shadow: 0 15px 35px rgba(249, 115, 22, 0.28);
-        }
-
-        .btn-primary:hover,
-        .btn-primary:focus {
-            transform: translateY(-4px);
-            box-shadow: 0 25px 45px rgba(249, 115, 22, 0.35);
-        }
-
-        .btn-secondary {
-            background: rgba(248, 247, 244, 0.08);
-            color: var(--mist);
-            border: 1px solid rgba(248, 247, 244, 0.25);
-        }
-
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            transform: translateY(-4px);
-            background: rgba(248, 247, 244, 0.16);
-            border-color: rgba(248, 247, 244, 0.45);
-        }
-
-        .hero-orbit {
-            position: relative;
-            min-height: 22rem;
-            border-radius: 24px;
-            border: 1px solid rgba(148, 163, 255, 0.18);
-            background: linear-gradient(160deg, rgba(4, 7, 16, 0.75), rgba(10, 15, 35, 0.92));
-            overflow: hidden;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: inset 0 0 45px rgba(14, 23, 42, 0.55);
-        }
-
-        .hero-orbit::before,
-        .hero-orbit::after {
-            content: "";
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(0px);
-        }
-
-        .hero-orbit::before {
-            width: 75%;
-            height: 75%;
-            top: -15%;
-            left: -18%;
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.35), transparent 65%);
-            opacity: 0.65;
-            mix-blend-mode: screen;
-        }
-
-        .hero-orbit::after {
-            width: 55%;
-            height: 55%;
-            bottom: -10%;
-            right: -10%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.35), transparent 60%);
-            opacity: 0.55;
-            mix-blend-mode: screen;
-        }
-
-        .hero-highlight {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .hero-highlight strong {
-            font-size: 1.1rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: rgba(248, 247, 244, 0.86);
-        }
-
-        .hero-stat-grid {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        @media (min-width: 640px) {
-            .hero-stat-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        .hero-stat {
-            padding: 1.25rem 1.5rem;
-            border-radius: 16px;
-            background: rgba(8, 11, 26, 0.75);
-            border: 1px solid rgba(248, 247, 244, 0.08);
-        }
-
-        .hero-stat h4 {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--mist);
-        }
-
-        .hero-stat p {
-            margin-top: 0.4rem;
-            font-size: 0.9rem;
-            color: rgba(248, 247, 244, 0.65);
-            line-height: 1.5;
-        }
-
-        .floating-mast {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .floating-mast svg {
-            width: 140%;
-            height: auto;
-            position: absolute;
-            bottom: -20%;
-            left: -20%;
-            opacity: 0.18;
-            filter: drop-shadow(0 0 24px rgba(249, 115, 22, 0.1));
-            transform: rotate(-4deg);
-        }
-
-        #ember-field {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        #ember-field span {
-            position: absolute;
-            bottom: -10%;
-            width: 4px;
-            height: 8px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, rgba(255, 196, 151, 0.95), rgba(249, 115, 22, 0.3));
-            box-shadow: 0 0 12px rgba(249, 115, 22, 0.8);
-            animation: ember-rise 18s linear infinite;
-            opacity: 0;
-        }
-
-        #ember-field.is-reduced-motion span {
-            bottom: auto;
-            animation: none;
-            opacity: 0.45;
-            filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.35));
-        }
-
-        @keyframes ember-rise {
-            0% {
-                transform: translate3d(0, 0, 0) scale(0.6);
-                opacity: 0;
-            }
-            15% {
-                opacity: 0.8;
-            }
-            50% {
-                opacity: 0.4;
-            }
-            100% {
-                transform: translate3d(0, -120vh, 0) scale(1.1);
-                opacity: 0;
-            }
-        }
-
-        .section {
-            position: relative;
-            padding: 6rem 0;
-        }
-
-        .section::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.85;
-            z-index: -2;
-        }
-
-        .section::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(180deg, rgba(249, 115, 22, 0.04), transparent 40%, transparent 60%, rgba(56, 189, 248, 0.05));
-            z-index: -1;
-        }
-
-        .section[data-tone="deep"]::before {
-            background: linear-gradient(160deg, rgba(6, 10, 26, 0.92), rgba(9, 12, 25, 0.88));
-        }
-
-        .section[data-tone="ember"]::before {
-            background: linear-gradient(160deg, rgba(24, 12, 4, 0.9), rgba(7, 9, 19, 0.92));
-        }
-
-        .section[data-tone="dawn"]::before {
-            background: linear-gradient(160deg, rgba(6, 12, 26, 0.8), rgba(9, 20, 45, 0.82));
-        }
-
-        .section[data-tone="shore"]::before {
-            background: linear-gradient(160deg, rgba(4, 10, 22, 0.88), rgba(9, 14, 32, 0.9));
-        }
-
-        .section-title {
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            font-size: 0.75rem;
-            color: rgba(248, 247, 244, 0.55);
-        }
-
-        .section-heading {
-            margin-top: 1rem;
-            font-family: 'Cinzel', 'Inter', serif;
-            font-size: clamp(2.1rem, 3vw + 1rem, 3.2rem);
-            letter-spacing: 0.02em;
-            color: var(--mist);
-        }
-
-        .section-description {
-            margin-top: 1.2rem;
-            max-width: 40rem;
-            color: rgba(248, 247, 244, 0.72);
-            line-height: 1.7;
-        }
-
-        .glass-panel {
-            border-radius: 24px;
-            border: 1px solid rgba(248, 247, 244, 0.08);
-            background: rgba(7, 11, 24, 0.65);
-            box-shadow: 0 20px 45px rgba(5, 6, 15, 0.55);
-            padding: clamp(1.75rem, 3vw, 2.5rem);
-            backdrop-filter: blur(24px);
-        }
-
-        .glow-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .glow-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-        }
-
-        .glow-card {
-            position: relative;
-            padding: 2rem 1.75rem;
-            border-radius: 20px;
-            background: rgba(248, 247, 244, 0.03);
-            border: 1px solid rgba(248, 247, 244, 0.08);
-            transition: transform 0.4s ease, border-color 0.4s ease, background 0.4s ease;
-            overflow: hidden;
-        }
-
-        .glow-card::before {
-            content: "";
-            position: absolute;
-            inset: -50% 20% auto -20%;
-            height: 110%;
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.28), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .glow-card:hover,
-        .glow-card:focus-within {
-            transform: translateY(-8px);
-            border-color: rgba(249, 115, 22, 0.35);
-            background: rgba(248, 247, 244, 0.06);
-        }
-
-        .glow-card:hover::before,
-        .glow-card:focus-within::before {
-            opacity: 1;
-        }
-
-        .glow-card h4 {
-            font-family: 'Cinzel', 'Inter', serif;
-            font-size: 1.35rem;
-            color: var(--mist);
-        }
-
-        .glow-card p {
-            margin-top: 0.75rem;
-            line-height: 1.6;
-            color: rgba(248, 247, 244, 0.68);
-        }
-
-        .pillar-list li + li {
-            margin-top: 1rem;
-        }
-
-        .pillar-icon {
-            width: 2.25rem;
-            height: 2.25rem;
-            border-radius: 999px;
-            display: grid;
-            place-items: center;
-            background: rgba(249, 115, 22, 0.2);
-            color: var(--mist);
-            font-size: 1.2rem;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0.2rem;
-            bottom: 0.2rem;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(249, 115, 22, 0.6), rgba(96, 165, 250, 0.55));
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 1.6rem;
-        }
-
-        .timeline-item::before {
-            content: "";
-            position: absolute;
-            left: -1.7rem;
-            top: 0.35rem;
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 999px;
-            background: linear-gradient(135deg, rgba(249, 115, 22, 0.75), rgba(96, 165, 250, 0.65));
-            box-shadow: 0 0 16px rgba(249, 115, 22, 0.65);
-        }
-
-        .aural-card {
-            border-radius: 22px;
-            padding: 2rem;
-            background: rgba(248, 247, 244, 0.04);
-            border: 1px solid rgba(148, 163, 255, 0.18);
-            box-shadow: inset 0 0 40px rgba(12, 16, 36, 0.7);
-        }
-
-        .aural-card + .aural-card {
-            margin-top: 1.5rem;
-        }
-
-        .list-dot {
-            width: 0.65rem;
-            height: 0.65rem;
-            border-radius: 999px;
-            background: rgba(249, 115, 22, 0.75);
-            box-shadow: 0 0 12px rgba(249, 115, 22, 0.45);
-            margin-top: 0.4rem;
-        }
-
-        .voice-card {
-            border-radius: 22px;
-            padding: 1.75rem;
-            border: 1px solid rgba(248, 247, 244, 0.08);
-            background: rgba(248, 247, 244, 0.04);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .voice-card:hover,
-        .voice-card:focus-within {
-            transform: translateY(-6px);
-            border-color: rgba(249, 115, 22, 0.28);
-        }
-
-        .voice-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(248, 247, 244, 0.08);
-            padding: 0.35rem 0.65rem;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .newsletter {
-            border-radius: 28px;
-            padding: clamp(2rem, 3vw, 2.75rem);
-            background: linear-gradient(160deg, rgba(14, 23, 42, 0.92), rgba(9, 15, 28, 0.92));
-            border: 1px solid rgba(148, 163, 255, 0.2);
-            box-shadow: 0 20px 50px rgba(2, 6, 18, 0.6);
-        }
-
-        .field {
-            position: relative;
-        }
-
-        .field label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: rgba(248, 247, 244, 0.65);
-            margin-bottom: 0.5rem;
-        }
-
-        .field input,
-        .field textarea {
-            width: 100%;
-            background: rgba(248, 247, 244, 0.06);
-            border: 1px solid rgba(248, 247, 244, 0.1);
-            border-radius: 16px;
-            padding: 0.85rem 1rem;
-            color: var(--mist);
-            font-size: 0.95rem;
-            transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-            resize: vertical;
-        }
-
-        .field input:focus,
-        .field textarea:focus {
-            outline: none;
-            border-color: rgba(249, 115, 22, 0.45);
-            background: rgba(248, 247, 244, 0.1);
-            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
-        }
-
-        .cta-panel {
-            border-radius: 24px;
-            background: linear-gradient(120deg, rgba(249, 115, 22, 0.12), rgba(30, 64, 175, 0.2));
-            border: 1px solid rgba(248, 247, 244, 0.08);
-            padding: 2.5rem;
-            box-shadow: 0 16px 45px rgba(3, 6, 19, 0.55);
-        }
-
-        footer {
-            position: relative;
-            background: linear-gradient(140deg, rgba(6, 9, 21, 0.95), rgba(9, 12, 24, 0.95));
-            border-top: 1px solid rgba(249, 115, 22, 0.18);
-            padding: 3rem 0;
-        }
-
-        footer::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 12% 20%, rgba(249, 115, 22, 0.2), transparent 55%);
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .footer-links a {
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(248, 247, 244, 0.65);
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover,
-        .footer-links a:focus {
-            color: rgba(249, 115, 22, 0.85);
-        }
-
-        .parallax-item {
-            transition: transform 0.6s ease-out;
-        }
-
-        [data-animate] {
-            opacity: 1;
-            transform: none;
-            transition: opacity 0.9s ease, transform 0.9s ease;
-        }
-
-        .js-enabled [data-animate] {
-            opacity: 0;
-            transform: translateY(45px);
-        }
-
-        .js-enabled [data-animate].is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .parallax-item,
-            [data-animate],
-            .btn-primary,
-            .btn-secondary,
-            .glow-card {
-                transition: none !important;
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-            }
-
-            #ember-field span {
-                animation: none !important;
-            }
-        }
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="public/css/style.css">
 </head>
+
 <body>
     <header class="site-header">
         <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="flex items-center gap-4">
                 <span class="brand-mark">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)" stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
-                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4" stroke-linecap="round" />
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
+                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4"
+                            stroke-linecap="round" />
                         <circle cx="24" cy="24" r="20" stroke="rgba(148,163,255,0.4)" stroke-width="1" />
                     </svg>
                 </span>
@@ -732,8 +33,8 @@
             <nav class="flex flex-wrap items-center gap-3">
                 <a class="nav-link" href="#about">About</a>
                 <a class="nav-link" href="#archive">Archive</a>
-                <a class="nav-link" href="#oral-history">Oral History</a>
-                <a class="nav-link" href="#voices">Voices</a>
+                <a class="nav-link" href="oral-histories/index.html">Oral History</a>
+                <a class="nav-link" href="voices/index.html">Voices</a>
                 <a class="nav-link" href="#contact">Contact</a>
             </nav>
         </div>
@@ -746,8 +47,10 @@
         <section class="hero">
             <div class="floating-mast parallax-item" data-parallax="0.04" aria-hidden="true">
                 <svg viewBox="0 0 820 420" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M90 260c80-60 160-90 240-70 80 20 160 90 240 90s160-70 210-90" stroke="rgba(249,115,22,0.4)" stroke-width="2" fill="none" />
-                    <path d="M180 220l45-110 90 50 50-120 130 180 90-120 105 100" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" fill="none" />
+                    <path d="M90 260c80-60 160-90 240-70 80 20 160 90 240 90s160-70 210-90"
+                        stroke="rgba(249,115,22,0.4)" stroke-width="2" fill="none" />
+                    <path d="M180 220l45-110 90 50 50-120 130 180 90-120 105 100" stroke="rgba(255,255,255,0.08)"
+                        stroke-width="1.2" fill="none" />
                 </svg>
             </div>
             <div id="ember-field" aria-hidden="true"></div>
@@ -757,7 +60,10 @@
                         <p class="uppercase tracking-[0.45em] text-xs text-amber-200/70">Voices among embers</p>
                         <h2 class="hero-headline mt-4">Where storm-tossed pages ignite the memory of the sea.</h2>
                         <p class="hero-description">
-                            Inspired by harbor fires and ruined cloisters, Vox Librorum is a living sanctuary for manuscripts and oral histories that once whispered through salt-stained halls. Step inside to awaken the resonant tide of knowledge, guided by archivists, translators, and keepers of memory.
+                            Inspired by harbor fires and ruined cloisters, Vox Librorum is a living sanctuary for
+                            manuscripts and oral histories that once whispered through salt-stained halls. Step inside
+                            to awaken the resonant tide of knowledge, guided by archivists, translators, and keepers of
+                            memory.
                         </p>
                         <div class="hero-actions">
                             <a href="#archive" class="btn-primary">
@@ -772,20 +78,25 @@
                     <div class="hero-orbit parallax-item" data-parallax="0.08" data-animate>
                         <div class="hero-highlight">
                             <strong>Signal Fires of Knowledge</strong>
-                            <p class="text-sm leading-relaxed text-white/70">Every recovered folio and recorded testimony becomes a lantern along the breakwater—guiding wanderers to the stories that survived the storm.</p>
+                            <p class="text-sm leading-relaxed text-white/70">Every recovered folio and recorded
+                                testimony becomes a lantern along the breakwater—guiding wanderers to the stories that
+                                survived the storm.</p>
                         </div>
                         <div class="hero-stat-grid">
                             <div class="hero-stat">
                                 <h4>2,840 + Illuminated Leaves</h4>
-                                <p>Digitized with spectral imaging to reveal erased glosses and shore-side marginalia.</p>
+                                <p>Digitized with spectral imaging to reveal erased glosses and shore-side marginalia.
+                                </p>
                             </div>
                             <div class="hero-stat">
                                 <h4>160 Live Oral Vigils</h4>
-                                <p>Community storytelling circles recorded beneath twilight skies, complete with annotated transcripts.</p>
+                                <p>Community storytelling circles recorded beneath twilight skies, complete with
+                                    annotated transcripts.</p>
                             </div>
                             <div class="hero-stat">
                                 <h4>Tidal Translation Lab</h4>
-                                <p>Volunteers blend machine-assisted drafts with whispered dialects to keep endangered languages audible.</p>
+                                <p>Volunteers blend machine-assisted drafts with whispered dialects to keep endangered
+                                    languages audible.</p>
                             </div>
                             <div class="hero-stat">
                                 <h4>Listening Beacons</h4>
@@ -803,20 +114,26 @@
                     <p class="section-title">About Vox Librorum</p>
                     <h3 class="section-heading">Custodians of the blazing stacks</h3>
                     <p class="section-description">
-                        Born from a coastal archive that survived flood and flame, Vox Librorum means <em>the voice of books</em>. We weave together rare manuscripts, underwater recoveries, and community testimonies to keep fragile stories speaking. Scholars, sailors, and neighborhood historians are invited to co-create a future where every page resonates like the tolling of harbor bells.
+                        Born from a coastal archive that survived flood and flame, Vox Librorum means <em>the voice of
+                            books</em>. We weave together rare manuscripts, underwater recoveries, and community
+                        testimonies to keep fragile stories speaking. Scholars, sailors, and neighborhood historians are
+                        invited to co-create a future where every page resonates like the tolling of harbor bells.
                     </p>
                     <div class="timeline mt-8 space-y-6">
                         <div class="timeline-item">
                             <h4 class="font-semibold text-lg text-white">Preserve</h4>
-                            <p class="text-white/70 text-sm leading-relaxed">Spectral imaging, desalination, and cloud-based codices protect the vellum before tides and embers erase their voices.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Spectral imaging, desalination, and
+                                cloud-based codices protect the vellum before tides and embers erase their voices.</p>
                         </div>
                         <div class="timeline-item">
                             <h4 class="font-semibold text-lg text-white">Translate</h4>
-                            <p class="text-white/70 text-sm leading-relaxed">Collaborative glossaries surface the cadence of regional dialects—from portside Ladino to archival Gaelic.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Collaborative glossaries surface the
+                                cadence of regional dialects—from portside Ladino to archival Gaelic.</p>
                         </div>
                         <div class="timeline-item">
                             <h4 class="font-semibold text-lg text-white">Resound</h4>
-                            <p class="text-white/70 text-sm leading-relaxed">Immersive sound design rekindles the timbre of voices lost to time, inviting listeners to stand within the blaze of memory.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Immersive sound design rekindles the timbre
+                                of voices lost to time, inviting listeners to stand within the blaze of memory.</p>
                         </div>
                     </div>
                 </div>
@@ -827,21 +144,25 @@
                             <span class="pillar-icon" aria-hidden="true">📜</span>
                             <div>
                                 <h5 class="font-semibold text-white text-lg">Stewardship</h5>
-                                <p class="text-white/70 text-sm leading-relaxed">From charred folios to salt-stiff diaries, we stabilize and digitize relics with meticulous care.</p>
+                                <p class="text-white/70 text-sm leading-relaxed">From charred folios to salt-stiff
+                                    diaries, we stabilize and digitize relics with meticulous care.</p>
                             </div>
                         </li>
                         <li class="flex gap-4">
                             <span class="pillar-icon" aria-hidden="true">🔊</span>
                             <div>
                                 <h5 class="font-semibold text-white text-lg">Amplification</h5>
-                                <p class="text-white/70 text-sm leading-relaxed">Audio essays, whispered translations, and choral readings ensure the archive is heard, not simply seen.</p>
+                                <p class="text-white/70 text-sm leading-relaxed">Audio essays, whispered translations,
+                                    and choral readings ensure the archive is heard, not simply seen.</p>
                             </div>
                         </li>
                         <li class="flex gap-4">
                             <span class="pillar-icon" aria-hidden="true">🌊</span>
                             <div>
                                 <h5 class="font-semibold text-white text-lg">Community</h5>
-                                <p class="text-white/70 text-sm leading-relaxed">We partner with waterfront neighborhoods, shipyards, and classrooms to co-curate memory for the tides ahead.</p>
+                                <p class="text-white/70 text-sm leading-relaxed">We partner with waterfront
+                                    neighborhoods, shipyards, and classrooms to co-curate memory for the tides ahead.
+                                </p>
                             </div>
                         </li>
                     </ul>
@@ -855,22 +176,28 @@
                     <div>
                         <p class="section-title">Digital Archive</p>
                         <h3 class="section-heading">Enter the ember vault</h3>
-                        <p class="section-description">Explore constellations of manuscripts and logbooks restored from the brink—complete with phonetic glossaries, curator essays, and soundscapes recorded on storm-kissed shores.</p>
+                        <p class="section-description">Explore constellations of manuscripts and logbooks restored from
+                            the brink—complete with phonetic glossaries, curator essays, and soundscapes recorded on
+                            storm-kissed shores.</p>
                     </div>
                     <a href="#contact" class="btn-secondary whitespace-nowrap">Request Guided Access</a>
                 </div>
                 <div class="glow-grid" data-animate>
                     <article class="glow-card">
                         <h4>Illuminated Wake</h4>
-                        <p>High-resolution folios with thermal overlays reveal hidden illuminations painted beneath soot. Audio guides let you hear the Latin marginalia in the cadence of cloistered scribes.</p>
+                        <p>High-resolution folios with thermal overlays reveal hidden illuminations painted beneath
+                            soot. Audio guides let you hear the Latin marginalia in the cadence of cloistered scribes.
+                        </p>
                     </article>
                     <article class="glow-card">
                         <h4>Tidebound Periodicals</h4>
-                        <p>Digitized abolitionist broadsides and resistance pamphlets recovered from ship manifests—paired with voice actors who rekindle the fervor of dockside rallies.</p>
+                        <p>Digitized abolitionist broadsides and resistance pamphlets recovered from ship
+                            manifests—paired with voice actors who rekindle the fervor of dockside rallies.</p>
                     </article>
                     <article class="glow-card">
                         <h4>Cartographer's Chorus</h4>
-                        <p>Interactive maps layer centuries of maritime annotations, letting you trace debates, warnings, and blessings sung across the Atlantic.</p>
+                        <p>Interactive maps layer centuries of maritime annotations, letting you trace debates,
+                            warnings, and blessings sung across the Atlantic.</p>
                     </article>
                 </div>
             </div>
@@ -881,17 +208,21 @@
                 <div data-animate>
                     <p class="section-title">Oral History Studio</p>
                     <h3 class="section-heading">Voices sheltered from the storm</h3>
-                    <p class="section-description">Our oral history expeditions capture guardians of memory—bookbinders, divers, lighthouse keepers, and families whose attics hold rebinding of lost worlds. Each vigil is transcribed, translated, and layered with the sound of tidepools and rigging.</p>
+                    <p class="section-description">Our oral history expeditions capture guardians of memory—bookbinders,
+                        divers, lighthouse keepers, and families whose attics hold rebinding of lost worlds. Each vigil
+                        is transcribed, translated, and layered with the sound of tidepools and rigging.</p>
                     <div class="grid sm:grid-cols-2 gap-4 mt-8">
                         <div class="aural-card">
                             <p class="uppercase tracking-[0.28em] text-xs text-white/60">Featured Vigil</p>
                             <h4 class="text-lg font-semibold mt-3 text-white">Elena García</h4>
-                            <p class="text-sm text-white/70 leading-relaxed">On translating Civil War letters preserved in a storm cellar, now sung bilingually for new generations.</p>
+                            <p class="text-sm text-white/70 leading-relaxed">On translating Civil War letters preserved
+                                in a storm cellar, now sung bilingually for new generations.</p>
                         </div>
                         <div class="aural-card">
                             <p class="uppercase tracking-[0.28em] text-xs text-white/60">New Arrival</p>
                             <h4 class="text-lg font-semibold mt-3 text-white">The Bindery Sessions</h4>
-                            <p class="text-sm text-white/70 leading-relaxed">Field recordings from artisanal binderies repairing scorched volumes with ancestral techniques.</p>
+                            <p class="text-sm text-white/70 leading-relaxed">Field recordings from artisanal binderies
+                                repairing scorched volumes with ancestral techniques.</p>
                         </div>
                     </div>
                 </div>
@@ -900,15 +231,18 @@
                     <ul class="space-y-4">
                         <li class="flex gap-4">
                             <span class="list-dot" aria-hidden="true"></span>
-                            <p class="text-white/70 text-sm leading-relaxed">Acoustic restoration removes hiss, wind, and water damage without silencing the intimacy of the storyteller.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Acoustic restoration removes hiss, wind,
+                                and water damage without silencing the intimacy of the storyteller.</p>
                         </li>
                         <li class="flex gap-4">
                             <span class="list-dot" aria-hidden="true"></span>
-                            <p class="text-white/70 text-sm leading-relaxed">Multilingual transcripts include phonetic glossaries, letting listeners echo endangered pronunciations.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Multilingual transcripts include phonetic
+                                glossaries, letting listeners echo endangered pronunciations.</p>
                         </li>
                         <li class="flex gap-4">
                             <span class="list-dot" aria-hidden="true"></span>
-                            <p class="text-white/70 text-sm leading-relaxed">Community workshops teach families to record oral histories using mobile studios packed in weatherproof chests.</p>
+                            <p class="text-white/70 text-sm leading-relaxed">Community workshops teach families to
+                                record oral histories using mobile studios packed in weatherproof chests.</p>
                         </li>
                     </ul>
                     <a href="#contact" class="btn-primary inline-flex self-start">Nominate a Storyteller</a>
@@ -921,28 +255,37 @@
                 <div data-animate>
                     <p class="section-title">Chorus of Readers</p>
                     <h3 class="section-heading">Echoes from the breakwater</h3>
-                    <p class="section-description">Experience how our community remixes the archive—through playlists, diary reenactments, translation circles, and youth performances that crackle like signal fires against the dusk.</p>
+                    <p class="section-description">Experience how our community remixes the archive—through playlists,
+                        diary reenactments, translation circles, and youth performances that crackle like signal fires
+                        against the dusk.</p>
                 </div>
                 <div class="lg:col-span-2 grid md:grid-cols-2 gap-6" data-animate>
                     <article class="voice-card">
                         <span class="voice-tag">Listening Guide</span>
                         <h4 class="text-xl font-semibold mt-3 text-white">Soundmarks of the Renaissance</h4>
-                        <p class="text-white/70 text-sm leading-relaxed mt-3">A curated suite of readings from 15th-century humanist letters, performed with portside acoustics to honor the manuscripts rescued from the flooded archives.</p>
+                        <p class="text-white/70 text-sm leading-relaxed mt-3">A curated suite of readings from
+                            15th-century humanist letters, performed with portside acoustics to honor the manuscripts
+                            rescued from the flooded archives.</p>
                     </article>
                     <article class="voice-card">
                         <span class="voice-tag">Reader's Reflection</span>
                         <h4 class="text-xl font-semibold mt-3 text-white">A diary speaks again</h4>
-                        <p class="text-white/70 text-sm leading-relaxed mt-3">“Hearing my great-grandmother's 1912 journal recited with the creak of harborwood made it feel like she was walking beside me.” – Maya Li</p>
+                        <p class="text-white/70 text-sm leading-relaxed mt-3">“Hearing my great-grandmother's 1912
+                            journal recited with the creak of harborwood made it feel like she was walking beside me.” –
+                            Maya Li</p>
                     </article>
                     <article class="voice-card">
                         <span class="voice-tag">Translation in Progress</span>
                         <h4 class="text-xl font-semibold mt-3 text-white">Letters from the Moorish Library</h4>
-                        <p class="text-white/70 text-sm leading-relaxed mt-3">Volunteer translators collaborate via midnight calls and voice notes to render Ladino manuscripts, tracing echoes along the Mediterranean.</p>
+                        <p class="text-white/70 text-sm leading-relaxed mt-3">Volunteer translators collaborate via
+                            midnight calls and voice notes to render Ladino manuscripts, tracing echoes along the
+                            Mediterranean.</p>
                     </article>
                     <article class="voice-card">
                         <span class="voice-tag">Community Highlight</span>
                         <h4 class="text-xl font-semibold mt-3 text-white">Syllable Studios Youth Lab</h4>
-                        <p class="text-white/70 text-sm leading-relaxed mt-3">Teens remix public-domain poetry into spoken-word performances layered with ambient harbour sounds and digital projections.</p>
+                        <p class="text-white/70 text-sm leading-relaxed mt-3">Teens remix public-domain poetry into
+                            spoken-word performances layered with ambient harbour sounds and digital projections.</p>
                     </article>
                 </div>
             </div>
@@ -953,21 +296,25 @@
                 <div class="space-y-6" data-animate>
                     <p class="section-title">Curator's spotlight</p>
                     <h3 class="section-heading">Pairings that rekindle the stacks</h3>
-                    <p class="section-description">Each quarter we unveil a resonance pairing—a digitized treasure and a contemporary response forged by artists-in-residence stationed along the seawall.</p>
+                    <p class="section-description">Each quarter we unveil a resonance pairing—a digitized treasure and a
+                        contemporary response forged by artists-in-residence stationed along the seawall.</p>
                     <div class="glass-panel space-y-5">
                         <article>
                             <h4 class="text-xl font-semibold text-white">Codex Vox</h4>
-                            <p class="text-white/70 text-sm leading-relaxed mt-2">A 1532 herbal illuminated with alchemical marginalia, reimagined through an audio essay on ancestral healing rites.</p>
+                            <p class="text-white/70 text-sm leading-relaxed mt-2">A 1532 herbal illuminated with
+                                alchemical marginalia, reimagined through an audio essay on ancestral healing rites.</p>
                         </article>
                         <article>
                             <h4 class="text-xl font-semibold text-white">Letters Across the Atlantic</h4>
-                            <p class="text-white/70 text-sm leading-relaxed mt-2">A bilingual bundle of immigrant letters paired with a choral performance by descendants now sailing the same routes.</p>
+                            <p class="text-white/70 text-sm leading-relaxed mt-2">A bilingual bundle of immigrant
+                                letters paired with a choral performance by descendants now sailing the same routes.</p>
                         </article>
                     </div>
                 </div>
                 <div class="newsletter" data-animate>
                     <p class="uppercase tracking-[0.28em] text-xs text-white/60">Newsletter: Resonantia</p>
-                    <h3 class="text-2xl font-semibold mt-4">Receive restoration notes and invitations to twilight listening salons.</h3>
+                    <h3 class="text-2xl font-semibold mt-4">Receive restoration notes and invitations to twilight
+                        listening salons.</h3>
                     <form class="mt-6 space-y-4">
                         <div class="field">
                             <label for="newsletter-name">Name</label>
@@ -975,7 +322,8 @@
                         </div>
                         <div class="field">
                             <label for="newsletter-email">Email</label>
-                            <input id="newsletter-email" name="newsletter-email" type="email" placeholder="you@example.com">
+                            <input id="newsletter-email" name="newsletter-email" type="email"
+                                placeholder="you@example.com">
                         </div>
                         <button type="submit" class="btn-primary w-full justify-center">Subscribe</button>
                     </form>
@@ -988,7 +336,9 @@
                 <div data-animate>
                     <p class="section-title">Connect</p>
                     <h3 class="section-heading">Let your voice steer the archive</h3>
-                    <p class="section-description">Whether you steward a private collection, recall stories told aboard midnight watches, or want to volunteer, we welcome you to join the chorus that keeps the harbor of knowledge luminous.</p>
+                    <p class="section-description">Whether you steward a private collection, recall stories told aboard
+                        midnight watches, or want to volunteer, we welcome you to join the chorus that keeps the harbor
+                        of knowledge luminous.</p>
                     <div class="cta-panel space-y-4 mt-8">
                         <h4 class="text-lg font-semibold text-white uppercase tracking-[0.2em]">Ways to contribute</h4>
                         <ul class="space-y-3 text-white/75 text-sm leading-relaxed">
@@ -1009,7 +359,8 @@
                     </div>
                     <div class="field">
                         <label for="message">Message</label>
-                        <textarea id="message" name="contact-message" rows="4" placeholder="Tell us about your project"></textarea>
+                        <textarea id="message" name="contact-message" rows="4"
+                            placeholder="Tell us about your project"></textarea>
                     </div>
                     <button type="submit" class="btn-primary w-full justify-center">Send Message</button>
                 </form>
@@ -1024,13 +375,14 @@
                 <p class="mt-2 text-sm text-white/70">Harboring the voices of the archive—from embers to tide.</p>
             </div>
             <div class="footer-links flex gap-6">
-                <a href="#">Access Statement</a>
-                <a href="#">Press Kit</a>
-                <a href="#">Support Vox Librorum</a>
+                <a href="#contact">Contact</a>
+                <a href="#">Support the Mission</a>
+                <a href="login.html">Scholar Login</a>
             </div>
         </div>
     </footer>
 
-    <script src="/js/site.js" defer></script>
+    <script src="public/js/site.js" defer></script>
 </body>
+
 </html>

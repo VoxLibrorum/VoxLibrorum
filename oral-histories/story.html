@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        .reader-container {
+            max-width: 65ch;
+            margin: 0 auto;
+        }
+
+        .manuscript-text {
+            font-family: 'Cormorant Garmond', 'Times New Roman', serif;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #d1d5db;
+            /* gray-300 */
+        }
+
+        .manuscript-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .manuscript-text p:first-of-type::first-letter {
+            float: left;
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            line-height: 0.8;
+            padding-right: 0.5rem;
+            padding-top: 0.2rem;
+            color: var(--ember);
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .audio-player-mock {
+            background: rgba(10, 15, 30, 0.6);
+            border: 1px solid rgba(248, 247, 244, 0.1);
+            border-radius: 999px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .audio-player-mock:hover {
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+
+        .play-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--ember);
+            display: grid;
+            place-items: center;
+            color: var(--night);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .waveform {
+            flex-grow: 1;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            opacity: 0.6;
+        }
+
+        .bar {
+            width: 3px;
+            background: rgba(248, 247, 244, 0.8);
+            border-radius: 2px;
+            animation: wave 1.2s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+
+        .audio-player-mock.playing .bar {
+            animation-play-state: running;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                height: 20%;
+                opacity: 0.5;
+            }
+
+            50% {
+                height: 100%;
+                opacity: 1;
+            }
+        }
+
+        .meta-sidebar {
+            border-left: 1px solid rgba(248, 247, 244, 0.1);
+            padding-left: 1.5rem;
+        }
+
+        .meta-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-label {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(248, 247, 244, 0.5);
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--mist);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="brand-mark block">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="rgba(249,115,22,0.85)"
+                            stroke-width="1.6" fill="rgba(255,255,255,0.03)" />
+                        <path d="M24 13v9.2l6.7 3.8" stroke="rgba(226,232,240,0.9)" stroke-width="1.4"
+                            stroke-linecap="round" />
+                        <circle cx="24" cy="24" r="20" stroke="rgba(148,163,255,0.4)" stroke-width="1" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-semibold tracking-wide"><a href="../index.html">Vox Librorum</a>
+                    </h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-6">
+                <a href="index.html"
+                    class="text-sm uppercase tracking-widest text-white/60 hover:text-amber-500 transition-colors">⟵
+                    Back to Collection</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="min-h-screen">
+        <section class="section pt-20 pb-40">
+            <div id="ember-field" aria-hidden="true" style="opacity: 0.5;"></div>
+
+            <div class="container mx-auto px-6">
+                <!-- Title Block -->
+                <div class="text-center mb-16 max-w-4xl mx-auto" data-animate>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-xs uppercase tracking-widest mb-6">
+                        <span id="storyIdDisplay">Archive Item #000</span>
+                    </div>
+                    <h2 class="hero-headline text-4xl md:text-5xl lg:text-6xl mb-6" id="storyTitle">Loading Story...
+                    </h2>
+                    <p class="text-lg text-white/60 italic" id="storySummary">Retrieving archival data...</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-6xl mx-auto">
+
+                    <!-- Sidebar (Metadata) -->
+                    <aside class="lg:col-span-3 order-2 lg:order-1" data-animate style="transition-delay: 0.1s;">
+                        <div class="meta-sidebar sticky top-32">
+                            <div class="meta-item">
+                                <span class="meta-label">Contributor</span>
+                                <div class="meta-value flex items-center gap-2">
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs text-amber-500 font-bold">
+                                        ?</div>
+                                    <span id="storyContributor">Unknown</span>
+                                </div>
+                            </div>
+
+                            <div class="meta-item">
+                                <span class="meta-label">Era / Time Period</span>
+                                <div class="meta-value" id="storyEra">Unknown</div>
+                            </div>
+
+                            <div class="meta-item">
+                                <span class="meta-label">Location</span>
+                                <div class="meta-value" id="storyLocation">Unknown</div>
+                            </div>
+
+                            <div class="meta-item">
+                                <span class="meta-label">Tags</span>
+                                <div class="flex flex-wrap gap-2 mt-1" id="storyTags">
+                                    <!-- Tags injected here -->
+                                </div>
+                            </div>
+
+                            <div class="meta-item mt-8 pt-8 border-t border-white/10">
+                                <span class="meta-label">Status</span>
+                                <div class="meta-value text-green-400">● Public Archive</div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Main Content -->
+                    <article class="lg:col-span-8 lg:col-start-4 order-1 lg:order-2" data-animate
+                        style="transition-delay: 0.2s;">
+
+                        <!-- Audio Player Mockup -->
+                        <div class="audio-player-mock" id="audioPlayer">
+                            <div class="play-btn" id="playBtn">
+                                <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+                                    <path
+                                        d="M11 6.13397C11.6667 6.51887 11.6667 7.48113 11 7.86603L1.5 13.3516C0.833334 13.7365 0 13.2554 0 12.4856V1.51442C0 0.744602 0.833333 0.263492 1.5 0.648391L11 6.13397Z" />
+                                </svg>
+                            </div>
+                            <div class="text-xs uppercase tracking-widest text-amber-500/80 mr-2">Oral Record</div>
+                            <div class="waveform" id="waveform">
+                                <!-- Bars generic -->
+                                <div class="bar" style="height: 40%; animation-duration: 0.8s"></div>
+                                <div class="bar" style="height: 70%; animation-duration: 1.1s"></div>
+                                <div class="bar" style="height: 50%; animation-duration: 0.9s"></div>
+                                <div class="bar" style="height: 80%; animation-duration: 1.3s"></div>
+                                <div class="bar" style="height: 30%; animation-duration: 0.7s"></div>
+                                <div class="bar" style="height: 60%; animation-duration: 1.0s"></div>
+                                <div class="bar" style="height: 90%; animation-duration: 1.2s"></div>
+                                <div class="bar" style="height: 50%; animation-duration: 0.8s"></div>
+                                <div class="bar" style="height: 40%; animation-duration: 1.4s"></div>
+                                <div class="bar" style="height: 70%; animation-duration: 0.9s"></div>
+                                <div class="bar" style="height: 40%; animation-duration: 0.8s"></div>
+                                <div class="bar" style="height: 70%; animation-duration: 1.1s"></div>
+                                <div class="bar" style="height: 50%; animation-duration: 0.9s"></div>
+                                <div class="bar" style="height: 80%; animation-duration: 1.3s"></div>
+                                <div class="bar" style="height: 30%; animation-duration: 0.7s"></div>
+                                <div class="bar" style="height: 60%; animation-duration: 1.0s"></div>
+                                <div class="bar" style="height: 90%; animation-duration: 1.2s"></div>
+                                <div class="bar" style="height: 50%; animation-duration: 0.8s"></div>
+                                <div class="bar" style="height: 40%; animation-duration: 1.4s"></div>
+                                <div class="bar" style="height: 70%; animation-duration: 0.9s"></div>
+                            </div>
+                            <div class="text-xs font-mono text-white/40">04:12</div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="reader-container manuscript-text" id="storyBody">
+                            <!-- Injected Story Text -->
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div
+                            class="mt-20 pt-10 border-t border-white/10 flex justify-between items-center text-sm text-white/40">
+                            <div>
+                                Archived on <span class="text-white/60">Dec 09, 2025</span>
+                            </div>
+                            <div class="flex gap-4">
+                                <button class="hover:text-amber-500 transition-colors">Share</button>
+                                <button class="hover:text-amber-500 transition-colors">Cite</button>
+                                <button class="hover:text-red-400 transition-colors">Report</button>
+                            </div>
+                        </div>
+
+                    </article>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="../public/js/site.js"></script>
+    <script>
+        // Placeholder Data (Should ideally be shared with index, but duplicated for now for simplicity of static demo)
+        const stories = [
+            {
+                id: 1,
+                title: "The Lighthouse Keeper's Confession",
+                contributor: "Elias Thorne",
+                summary: "Startling accounts of strange lights seen from the Blackwood Lighthouse during the storm of '94.",
+                tags: ["maritime", "mystery", "1994"],
+                era: "Late 20th Century",
+                location: "Blackwood Coast",
+                body: `
+                    <p>It wasn't the storm that scared me. You get used to the storms out here; the way the waves hammer against the foundation like a giant fist, the way the wind screams through the gallery railing. No, it wasn't the noise. It was the silence that came after.</p>
+                    <p>It was exactly 03:00 hours when the main lamp died. Not flickered, not dimmed—died. I scrambled up the ladder, tools in hand, cursing the generator. But when I reached the lantern room, the bulb was intact. The backup batteries were fully charged. It was as if the electricity itself had just... stopped deciding to move.</p>
+                    <p>That's when I saw it. Out on the water. It wasn't a ship. I know the silhouette of every vessel that passes these waters, from the massive cargo haulers to the local fishing trawlers. This was something else. A geometric shape, sharp angles against the rolling black waves, glowing with a light that didn't cast a beam but seemed to stain the fog around it a bruise-purple.</p>
+                    <p>I froze. A keeper isn't supposed to freeze. We are the watchers. But I watched it rise, silent as a thought, until it hovered just above the crest of the waves. And then, for a brief second, the light from it pulsed, and I felt it in my teeth, a vibration that tasted like copper.</p>
+                    <p>Then the main lamp surged back on, blindingly bright. When my eyes adjusted, the sea was empty. Just the waves. Just the wind returning to its scream. But I know what I saw. And I know why the old keepers never stayed past their fifth year.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Whispers of the Old Market",
+                contributor: "Sarah Chen",
+                summary: "An oral tradition passed down regarding the 'midnight trades'.",
+                tags: ["modern", "urban", "folklore"],
+                era: "Contemporary",
+                location: "New Veridia",
+                body: `
+                    <p>My grandmother always told us never to cut through the Old Market after the clock strikes twelve. 'The merchants change,' she would say, tapping her nose. 'And they don't sell fruit and silk anymore.'</p>
+                    <p>I thought it was just a story to keep us safe from pickpockets. But last Tuesday, I missed the last bus. The shortcut through the market stands was the only way to get home before the rain started. The stalls were covered in their heavy canvas tarps, grey ghosts in the moonlight. Or so I thought.</p>
+                    <p>Halfway down Spice Alley, I smelled it. Not cardamom or cumin, but something sharp—like ozone and old paper. A single stall was open. No lantern lit it, yet the wares were visible. Jars of breath. Spools of shadow. And the merchant... he looked at me, and he didn't have eyes, just smooth skin where they should be.</p>
+                    <p>'Looking or selling?' he asked. His voice sounded like dry leaves skittering on pavement. I ran. I ran all the way to 4th Street and didn't look back.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "The Sunken Bell",
+                contributor: "Capt. H. Sterling",
+                summary: "A retrieved logbook entry read aloud, detailing the discovery of a bronze bell.",
+                tags: ["maritime", "artifact", "mystery"],
+                era: "1920s",
+                location: "North Sea",
+                body: `<p>Logbook Entry: October 14, 1924.</p><p>We hauled it up with the portside winch. Barnacles had claimed most of it, but the bronze beneath was untouched by the salt. It had no clapper. Yet, when the boys set it on the deck, every man aboard swore they heard a low hum, a tone so deep it made your chest ache.</p><p>Cook says we should throw it back. Says it belongs to the Drowned King. I told him I don't believe in fairy tales. But tonight, the water is flat as glass, and I can see lights moving down deep. Not fish. Not bioluminescence. Torches. Marching.</p>`
+            },
+            {
+                id: 4,
+                title: "Echoes of the Cloisters",
+                contributor: "Dr. Aris Vane",
+                summary: "Architectural anomalies found during restoration.",
+                tags: ["cloisters", "architecture", "mystery"],
+                era: "18th Century",
+                location: "St. Jude",
+                body: `<p>We found the room by accident. The blueprints for the West Wing clearly show a solid foundation wall. But when the masonry crew started repointing the stone, a chisel slipped. It fell *through* the wall.</p><p>Behind the granite was a hollow space. A cell. Perfectly round, which is impossible for the period. And the acoustics... my god. If you whisper in the center, the sound doesn't echo back to you instantly. It takes four seconds. Exactly four seconds of silence before your own voice returns, slightly deeper.</p><p>What kind of physics allows for a four-second delay in a ten-foot room?</p>`
+            },
+            {
+                id: 5,
+                title: "Letters from the Dust Bowl",
+                contributor: "Anonymous",
+                summary: "Letters describing 'rain that tasted of ash'.",
+                tags: ["history", "nature"],
+                era: "1930s",
+                location: "Midwest",
+                body: `<p>Dearest Martha,</p><p>The cows are gone. The dust took them. It fills their lungs until they just lay down and sleep. But it's the shapes in the storm that worry me. Yesterday, the wall of black dirt hit at noon, turning day to night. I lit the lamp and sat by the window.</p><p>I saw safe-walkers. Tall, thin things striding through the wind. They don't bend against the gale. They walk right through the fences. Pa says I'm feverish from the dry air. But I saw them stop by the barn. I think they are looking for water. I think they are looking for us.</p>`
+            },
+            {
+                id: 6,
+                title: "The Silent Choir",
+                contributor: "M. Kovac",
+                summary: "An audio recording from 1982.",
+                tags: ["mystery", "audio", "cloisters"],
+                era: "1980s",
+                location: "Vostok",
+                body: `<p>[Audio Transcript: Tape #8921]</p><p><strong>Subject:</strong> St. Basil's Cathedral, Midnight Mass (Empty)</p><p><strong>Note:</strong> The cathedral was closed for renovations. No personnel were inside. The recorder was left on the altar to capture ambient reverb for an acoustics study.</p><p><strong>00:00 - 04:00:</strong> Silence. Distant traffic.</p><p><strong>04:12:</strong> A single voice, soprano. Singing a scale that doesn't exist in Western music notation.</p><p><strong>04:15:</strong> A second voice joins. Baritone. The chord they create causes the recording equipment to clip, despite low gain settings.</p><p><strong>04:40:</strong> The sound of a thousand voices inhaling at once. Then the tape snaps.</p>`
+            }
+        ];
+
+        // Runtime Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+
+            // Basic router logic
+            if (!id) {
+                // No ID? Load story #1 by default for demo
+                loadStory(1);
+            } else {
+                const story = stories.find(s => s.id === id);
+                if (story) {
+                    loadStory(story.id);
+                } else {
+                    document.getElementById('storyTitle').innerText = "Story Not Found";
+                    document.getElementById('storySummary').innerText = "The requested archive item does not exist or has been redacted.";
+                    document.getElementById('audioPlayer').style.display = 'none';
+                }
+            }
+        });
+
+        function loadStory(id) {
+            const story = stories.find(s => s.id === id);
+            if (!story) return;
+
+            // Fill Data
+            document.getElementById('storyIdDisplay').innerText = `Archive Item #${String(id).padStart(3, '0')}`;
+            document.getElementById('storyTitle').innerText = story.title;
+            // document.getElementById('storySummary').innerText = story.summary; // Optional: hide summary on detail view?
+            document.getElementById('storySummary').style.display = 'none'; // hiding for cleaner look
+            document.getElementById('storyContributor').innerText = story.contributor;
+            document.getElementById('storyEra').innerText = story.era;
+            document.getElementById('storyLocation').innerText = story.location;
+
+            // Fills Tags
+            const tagsContainer = document.getElementById('storyTags');
+            tagsContainer.innerHTML = '';
+            story.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'text-xs border border-white/20 px-2 py-1 rounded-md text-white/50 uppercase tracking-wider';
+                span.innerText = tag;
+                tagsContainer.appendChild(span);
+            });
+
+            // Fill Body
+            const bodyContainer = document.getElementById('storyBody');
+            // If we have specific body text use it, otherwise use lorem ipsum generator or summary
+            if (story.body) {
+                bodyContainer.innerHTML = story.body;
+            } else {
+                bodyContainer.innerHTML = `<p>${story.summary}</p><p><em>[Full transcript currently being digitized by Vox Librorum archivists...]</em></p>`;
+            }
+
+            // Audio Player Interaction
+            const player = document.getElementById('audioPlayer');
+            const playBtn = document.getElementById('playBtn');
+            const bars = document.querySelectorAll('.bar');
+            let playing = false;
+
+            playBtn.addEventListener('click', () => {
+                playing = !playing;
+                if (playing) {
+                    player.classList.add('playing');
+                    playBtn.innerHTML = '<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><rect width="4" height="14" rx="1" /><rect x="8" width="4" height="14" rx="1" /></svg>'; // Pause icon
+                } else {
+                    player.classList.remove('playing');
+                    playBtn.innerHTML = '<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><path d="M11 6.13397C11.6667 6.51887 11.6667 7.48113 11 7.86603L1.5 13.3516C0.833334 13.7365 0 13.2554 0 12.4856V1.51442C0 0.744602 0.833333 0.263492 1.5 0.648391L11 6.13397Z"/></svg>'; // Play icon
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

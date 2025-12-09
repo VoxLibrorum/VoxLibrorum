@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Desk | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        /* Desk-Specific Overrides */
+        body {
+            background-color: #020305;
+            /* Deepest black/blue */
+            overflow: hidden;
+            /* App-like feel, no window scroll */
+        }
+
+        .desk-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr 320px;
+            grid-template-rows: 60px 1fr;
+            height: 100vh;
+        }
+
+        /* Header Area */
+        .desk-header {
+            grid-column: 1 / -1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(5, 7, 10, 0.95);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            justify-content: space-between;
+        }
+
+        /* Left Panel: The Shelf (Projects) */
+        .desk-shelf {
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(10, 12, 16, 0.4);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .project-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .project-item.active {
+            background: rgba(249, 115, 22, 0.05);
+            border-color: rgba(249, 115, 22, 0.2);
+            color: var(--mist);
+        }
+
+        .project-icon {
+            width: 1rem;
+            height: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Middle Panel: The Workspace (Focus Area) */
+        .desk-workspace {
+            padding: 2rem;
+            overflow-y: auto;
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.03) 0%, transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* Resource Card (Items on the desk) */
+        .resource-card {
+            background: rgba(20, 24, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .resource-card:hover {
+            border-color: rgba(249, 115, 22, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tag-pill {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 99px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+        }
+
+        /* Right Panel: The Conduit (AI/Connections) */
+        .desk-conduit {
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(10, 12, 16, 0.4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .conduit-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .conduit-stream {
+            flex-grow: 1;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            overflow-y: auto;
+        }
+
+        .ai-msg {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .ai-msg strong {
+            color: var(--ember);
+        }
+
+        .conduit-input {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .conduit-input input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        .conduit-input input:focus {
+            outline: none;
+            border-color: var(--ember);
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.1);
+        }
+
+        /* Mobile fallback (hide grid) */
+        @media (max-width: 1024px) {
+            .desk-grid {
+                display: block;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .desk-grid>* {
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        /* Custom Scrollbar for Desk Panels */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(249, 115, 22, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="desk-grid">
+
+        <!-- HEADER -->
+        <header class="desk-header">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    <svg class="w-5 h-5 text-amber-500" viewBox="0 0 48 48" fill="none">
+                        <path d="M11 15.5L24 7l13 8.5V33L24 41l-13-8V15.5z" stroke="currentColor" stroke-width="3" />
+                    </svg>
+                    <span class="font-serif text-lg tracking-wide">Vox Desk</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs uppercase tracking-widest text-white/30">User: Archivist Nova</span>
+                <div
+                    class="w-8 h-8 rounded-full bg-amber-900/30 border border-amber-500/30 flex items-center justify-center text-amber-500 text-xs font-bold">
+                    N
+                </div>
+            </div>
+        </header>
+
+        <!-- LEFT: SHELF -->
+        <aside class="desk-shelf">
+            <h4 class="text-xs uppercase tracking-widest text-white/30 mb-6">Active Projects</h4>
+
+            <div class="project-item active">
+                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <div class="flex-grow">
+                    <div class="font-medium text-sm">The Salt Line</div>
+                    <div class="text-[0.65rem] opacity-60">3 Resources Loaded</div>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <div class="flex-grow">
+                    <div class="font-medium text-sm">St. Jude Anomalies</div>
+                    <div class="text-[0.65rem] opacity-60">12 Resources Loaded</div>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <div class="flex-grow">
+                    <div class="font-medium text-sm">Vostok Signal</div>
+                    <div class="text-[0.65rem] opacity-60">1 Resource Loaded</div>
+                </div>
+            </div>
+
+            <button class="flex items-center gap-2 text-xs text-amber-500 hover:text-amber-400 mt-6 pl-2">
+                <span>+</span> Create New Project
+            </button>
+        </aside>
+
+        <!-- CENTER: WORKSPACE -->
+        <main class="desk-workspace">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-serif text-mist mb-2">The Salt Line</h2>
+                    <p class="text-sm text-white/40 max-w-lg">Investigating the recurring phenomeona of "purple fog"
+                        along the northern coastlines during the late 90s.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn-secondary text-xs py-2 px-4">Add Resource</button>
+                    <button class="text-white/40 hover:text-white p-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resource Cards on the Desk -->
+            <div class="grid xl:grid-cols-2 gap-6">
+
+                <!-- Card 1 -->
+                <article class="resource-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                                </path>
+                            </svg>
+                            <span class="text-xs uppercase tracking-wide text-amber-500/80">Oral History #001</span>
+                        </div>
+                        <button class="text-white/20 hover:text-white">✕</button>
+                    </div>
+                    <h3 class="text-lg font-serif text-white mb-2">The Lighthouse Keeper's Confession</h3>
+                    <p class="text-sm text-gray-400 mb-4 line-clamp-3">
+                        "It was exactly 03:00 hours when the main lamp died. Not flickered, not dimmed—died..."
+                    </p>
+                    <div class="flex gap-2">
+                        <span class="tag-pill">Primary Source</span>
+                        <span class="tag-pill">Maritime</span>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="resource-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
+                                </path>
+                            </svg>
+                            <span class="text-xs uppercase tracking-wide text-blue-400/80">Map Fragment</span>
+                        </div>
+                        <button class="text-white/20 hover:text-white">✕</button>
+                    </div>
+                    <h3 class="text-lg font-serif text-white mb-2">Topography of the Sunken City</h3>
+                    <p class="text-sm text-gray-400 mb-4 line-clamp-3">
+                        A rough charcoal sketch showing elevation lines that do not match current coastal surveys.
+                    </p>
+                    <div class="flex gap-2">
+                        <span class="tag-pill">Cartography</span>
+                        <span class="tag-pill">Redacted</span>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article
+                    class="resource-card border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:bg-white/5 cursor-pointer">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-white/40">Drag resources here</span>
+                </article>
+
+            </div>
+        </main>
+
+        <!-- RIGHT: CONDUIT -->
+        <aside class="desk-conduit">
+            <div class="conduit-header">
+                <h4 class="text-xs uppercase tracking-widest text-white/30">The Conduit</h4>
+            </div>
+
+            <div class="conduit-stream">
+                <div class="ai-msg">
+                    <strong>System:</strong> Project "The Salt Line" loaded successfully. 3 Resources linked.
+                </div>
+                <div class="ai-msg">
+                    <strong>Assistant:</strong> I have detected a correlation between the <em>Lighthouse Keeper's
+                        Confession</em> and the <em>Topography Map</em>. The coastal elevation drop matches the time of
+                    the lighthouse blackout (03:00).
+                </div>
+                <div class="ai-msg">
+                    <strong>System:</strong> New user submission received: "The Bell at Midnight". Similar tags
+                    detected.
+                </div>
+            </div>
+
+            <div class="conduit-input">
+                <input type="text" placeholder="Ask the Conduit to analyze connections...">
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../public/js/site.js"></script>
+    <script>
+        // Simple Interaction Logic
+        const projects = document.querySelectorAll('.project-item');
+        const workspaceTitle = document.querySelector('main h2');
+        const conduitStream = document.querySelector('.conduit-stream');
+        const input = document.querySelector('.conduit-input input');
+
+        projects.forEach(p => {
+            p.addEventListener('click', () => {
+                projects.forEach(x => x.classList.remove('active'));
+                p.classList.add('active');
+
+                // Mock visual update
+                workspaceTitle.innerText = p.querySelector('.font-medium').innerText;
+
+                // Mock AI response
+                const msg = document.createElement('div');
+                msg.className = 'ai-msg animate-pulse';
+                msg.innerHTML = `<strong>System:</strong> Switching context to ${workspaceTitle.innerText}...`;
+                conduitStream.appendChild(msg);
+                conduitStream.scrollTop = conduitStream.scrollHeight;
+            });
+        });
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const val = input.value;
+                input.value = '';
+
+                // User Msg
+                const userMsg = document.createElement('div');
+                userMsg.className = 'ai-msg';
+                userMsg.style.color = 'rgba(255,255,255,0.8)';
+                userMsg.innerHTML = `> ${val}`;
+                conduitStream.appendChild(userMsg);
+
+                // Bot Msg
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'ai-msg';
+                    botMsg.innerHTML = `<strong>Assistant:</strong> Searching archive for "${val}"... No direct matches found in current project scope. Try widening the aperture.`;
+                    conduitStream.appendChild(botMsg);
+                    conduitStream.scrollTop = conduitStream.scrollHeight;
+                }, 800);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

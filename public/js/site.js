@@ -164,6 +164,47 @@
     }
   }
 
+  /**
+   * Text Decoding Effect suitable for a "Ghost Town" / "Terminal" aesthetic.
+   * animatedText(element, finalString, speed)
+   */
+  function decodeText(element, finalString, duration = 1000) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+    const length = finalString.length;
+    let start = null;
+
+    const animate = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+
+      let output = "";
+      const revealIndex = Math.floor(progress * length);
+
+      for (let i = 0; i < length; i++) {
+        if (i < revealIndex) {
+          output += finalString[i];
+        } else {
+          output += chars[Math.floor(Math.random() * chars.length)];
+        }
+      }
+
+      element.innerText = output;
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        element.innerText = finalString; // Ensure final state
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  // Expose utilities globally safely
+  window.VOX_UTILS = {
+    decodeText
+  };
+
   // Run after DOM is ready.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

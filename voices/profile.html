@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributor Profile | Vox Librorum</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        .profile-header-bg {
+            background: linear-gradient(to bottom, transparent, #02040a),
+                url('../public/img/gate.jpg') center/cover no-repeat;
+            /* Fallback or reuse gate image for now, heavily darkened */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 400px;
+            opacity: 0.2;
+            z-index: -1;
+            filter: grayscale(100%);
+        }
+
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #1a1d26;
+            border: 2px solid var(--ember);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--mist);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
+        }
+
+        .dossier-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimony-link {
+            display: block;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .testimony-link:hover {
+            border-color: var(--ember);
+            background: rgba(249, 115, 22, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container mx-auto px-6 py-4">
+            <a href="index.html"
+                class="flex items-center gap-2 text-sm text-amber-500 hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Return to Voices
+            </a>
+        </div>
+    </header>
+
+    <div class="profile-header-bg"></div>
+
+    <main class="min-h-screen pb-20 pt-20">
+        <div class="container mx-auto px-6 max-w-4xl">
+
+            <div class="flex flex-col items-center text-center">
+                <div class="avatar-circle" id="profileAvatar">
+                    <!-- Initials -->
+                </div>
+                <div class="text-xs uppercase tracking-[0.2em] text-amber-500 mb-2" id="profileRole">Role</div>
+                <h1 class="text-4xl md:text-5xl font-serif text-mist mb-8" id="profileName">Loading...</h1>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-12 mt-12">
+
+                <!-- Main Bio -->
+                <div class="md:col-span-2">
+                    <h3 class="text-xs uppercase tracking-widest text-white/40 mb-6">Background Info</h3>
+                    <div class="prose prose-invert prose-lg font-serif text-white/70 leading-relaxed" id="profileBio">
+
+                    </div>
+
+                    <div class="dossier-section">
+                        <h3 class="text-xs uppercase tracking-widest text-white/40 mb-6">Recorded Testimonies</h3>
+                        <div id="testimonyList">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Info -->
+                <aside class="md:col-span-1 space-y-8">
+                    <div>
+                        <h4 class="text-xs uppercase tracking-widest text-white/40 mb-3">Status</h4>
+                        <div class="flex items-center gap-2 text-emerald-400">
+                            <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                            <span class="text-sm">Active Contributor</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase tracking-widest text-white/40 mb-3">Affiliation</h4>
+                        <p class="text-sm text-gray-400" id="profileAffiliation">None Listed</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase tracking-widest text-white/40 mb-3">Last Sighted</h4>
+                        <p class="text-sm text-gray-400">Blackwood Archives, 2 days ago</p>
+                    </div>
+                </aside>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        if (id) {
+            const p = DB.voices.find(v => v.id === id);
+
+            if (p) {
+                document.title = `${p.name} | Voices`;
+                // Initials
+                const initials = p.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+                // Decode Effect for Name
+                if (window.VOX_UTILS && window.VOX_UTILS.decodeText) {
+                    window.VOX_UTILS.decodeText(document.getElementById('profileName'), p.name, 1500);
+                } else {
+                    document.getElementById('profileName').innerText = p.name;
+                }
+
+                document.getElementById('profileRole').innerText = p.role;
+                document.getElementById('profileAvatar').innerText = initials;
+                document.getElementById('profileBio').innerHTML = `<p>${p.bio}</p>`;
+                document.getElementById('profileAffiliation').innerText = p.affiliation || "Unknown";
+
+                // Find Linked Testimonies
+                // We search for stories where the contributor name matches or is part of the story contributor string
+                const testimonies = DB.stories.filter(s => s.contributor.includes(p.name) || p.name.includes(s.contributor));
+
+                const list = document.getElementById('testimonyList');
+                if (testimonies.length > 0) {
+                    testimonies.forEach(t => {
+                        const a = document.createElement('a');
+                        a.href = `../oral-histories/story.html?id=${t.id}`;
+                        a.className = 'testimony-link';
+                        a.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <span class="font-serif text-mist">${t.title}</span>
+                                <span class="text-xs text-white/30">${t.era}</span>
+                            </div>
+                        `;
+                        list.appendChild(a);
+                    });
+                } else {
+                    list.innerHTML = `<p class="text-sm text-gray-500 italic">No public records found.</p>`;
+                }
+            } else {
+                document.getElementById('profileName').innerText = "Profile Not Found";
+                document.getElementById('profileBio').innerText = "The requested archivist or witness profile does not exist.";
+            }
+        }
+    </script>
+</body>
+
+</html>

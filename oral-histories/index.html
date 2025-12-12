@@ -196,70 +196,13 @@
     </footer>
 
     <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
     <script>
-        // Placeholder Data for Oral Histories
-        const stories = [
-            {
-                id: 1,
-                title: "The Lighthouse Keeper's Confession",
-                contributor: "Elias Thorne",
-                summary: "Startling accounts of strange lights seen from the Blackwood Lighthouse during the storm of '94, distinct from any known vessel.",
-                tags: ["maritime", "mystery", "1994"],
-                era: "Late 20th Century",
-                location: "Blackwood Coast",
-                status: "public"
-            },
-            {
-                id: 2,
-                title: "Whispers of the Old Market",
-                contributor: "Sarah Chen",
-                summary: "An oral tradition passed down through three generations of stall owners regarding the 'midnight trades' that supposedly occur on the new moon.",
-                tags: ["modern", "urban", "folklore"],
-                era: "Contemporary",
-                location: "New Veridia",
-                status: "public"
-            },
-            {
-                id: 3,
-                title: "The Sunken Bell",
-                contributor: "Capt. H. Sterling",
-                summary: "A retrieved logbook entry read aloud, detailing the discovery of a bronze bell four miles off the coast, inscribed with an unknown language.",
-                tags: ["maritime", "artifact", "mystery"],
-                era: "1920s",
-                location: "North Sea",
-                status: "public"
-            },
-            {
-                id: 4,
-                title: "Echoes of the Cloisters",
-                contributor: "Dr. Aris Vane",
-                summary: "Architectural anomalies found during the restoration of the St. Jude Abbey, suggesting the building was constructed around something else.",
-                tags: ["cloisters", "architecture", "mystery"],
-                era: "18th Century",
-                location: "St. Jude",
-                status: "public"
-            },
-            {
-                id: 5,
-                title: "Letters from the Dust Bowl",
-                contributor: "Anonymous",
-                summary: "A series of letters read by a descendant, describing 'rain that tasted of ash' and figures walking in the dust storms.",
-                tags: ["history", "nature"],
-                era: "1930s",
-                location: "Midwest",
-                status: "public"
-            },
-            {
-                id: 6,
-                title: "The Silent Choir",
-                contributor: "M. Kovac",
-                summary: "An audio recording from 1982 that captured a choral performance in an empty cathedral.",
-                tags: ["mystery", "audio", "cloisters"],
-                era: "1980s",
-                location: "Vostok",
-                status: "public"
-            }
-        ];
+        // Data Source
+        const dbStories = DB.stories || [];
+        const localStories = JSON.parse(localStorage.getItem('voxStories') || '[]');
+        // Combine, ensuring local ones (user submitted) are at the top
+        const stories = [...localStories, ...dbStories];
 
         // DOM Elements
         const grid = document.getElementById('storiesGrid');

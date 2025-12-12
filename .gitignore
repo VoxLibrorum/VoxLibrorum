@@ -6,3 +6,11 @@ npm-debug.log*
 # Runtime
 pids
 dist/
+
+# Database
+*.sqlite
+*.db
+
+# Environment variables
+.env
+.env.local

@@ -162,16 +162,34 @@
             <div id="ember-field" aria-hidden="true"></div>
         </section>
 
-        <!-- Filters (Minimal) -->
+        <!-- Search & Filters -->
         <div class="container mx-auto px-6 mb-12 relative z-20" data-animate>
-            <div class="flex gap-4 border-b border-white/10 pb-4 overflow-x-auto">
-                <button class="text-sm uppercase tracking-widest text-amber-500 font-bold">All Voices</button>
+            <!-- Search -->
+            <div class="max-w-md mb-8">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Search for a name or role..."
+                        class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-colors">
+                    <svg class="w-5 h-5 text-white/20 absolute right-4 top-3" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-4 border-b border-white/10 pb-4 overflow-x-auto" id="filterNav">
+                <button class="text-sm uppercase tracking-widest text-amber-500 font-bold whitespace-nowrap active"
+                    data-role="all">All Voices</button>
                 <button
-                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Archivists</button>
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors whitespace-nowrap"
+                    data-role="Archivist">Archivists</button>
                 <button
-                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Scholars</button>
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors whitespace-nowrap"
+                    data-role="Scholar">Scholars</button>
                 <button
-                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors">Witnesses</button>
+                    class="text-sm uppercase tracking-widest text-white/40 hover:text-white transition-colors whitespace-nowrap"
+                    data-role="Witness">Witnesses</button>
             </div>
         </div>
 
@@ -179,72 +197,7 @@
         <section class="section pb-32 pt-0">
             <div class="container mx-auto px-6">
                 <div class="masonry-grid" id="voicesGrid">
-
-                    <!-- Archivist Card (Featured) -->
-                    <div class="voice-dossier">
-                        <span class="archivist-badge">Head Archivist</span>
-                        <span class="voice-role">Custodian of the Ember Vault</span>
-                        <h3 class="voice-name">Elara Vance</h3>
-                        <div class="voice-bio">
-                            <p>Specializes in the recovery of manuscripts damaged by salt water. Elara has spent the
-                                last decade cataloging the "Drowned Library" collection. Rumored to hold the only known
-                                key to the Lower Sanctum.</p>
-                        </div>
-                    </div>
-
-                    <!-- Voice Card -->
-                    <div class="voice-dossier">
-                        <span class="voice-role">Witness • Maritime</span>
-                        <h3 class="voice-name">Elias Thorne</h3>
-                        <div class="voice-bio">
-                            <p>Former keeper of the Blackwood Lighthouse. His testimony regarding the "Purple Fog"
-                                phenomena of 1994 remains one of the most cited accounts in the oral history collection.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Voice Card -->
-                    <div class="voice-dossier">
-                        <span class="voice-role">Scholar • Architecture</span>
-                        <h3 class="voice-name">Dr. Aris Vane</h3>
-                        <div class="voice-bio">
-                            <p>A structural historian obsessed with "impossible geometries" in 18th-century cloisters.
-                                Currently leading the restoration project at St. Jude, where the Echo Chamber was
-                                discovered.</p>
-                        </div>
-                    </div>
-
-                    <!-- Voice Card -->
-                    <div class="voice-dossier">
-                        <span class="voice-role">Traveler</span>
-                        <h3 class="voice-name">Kaelen Oroy</h3>
-                        <div class="voice-bio">
-                            <p>A cartographer of "shadow paths." Kaelen claims to have walked the road depicted in the
-                                "Burning Ship" engraving, though no map shows its existence. Contributes rough sketches
-                                and charcoal rubbings.</p>
-                        </div>
-                    </div>
-
-                    <!-- Voice Card -->
-                    <div class="voice-dossier">
-                        <span class="voice-role">Contributor</span>
-                        <h3 class="voice-name">Anonymous (User #892)</h3>
-                        <div class="voice-bio">
-                            <p>Submitted a collection of letters found in an attic in Vienna. The letters describe a
-                                city that overlaps with the real one, visible only at twilight.</p>
-                        </div>
-                    </div>
-
-                    <!-- Voice Card -->
-                    <div class="voice-dossier">
-                        <span class="voice-role">Archivist</span>
-                        <h3 class="voice-name">Julian Black</h3>
-                        <div class="voice-bio">
-                            <p>Focuses on acoustic archaeology. Julian digitizes the "silent" tapes—recordings of empty
-                                rooms that contain unexplained resonances.</p>
-                        </div>
-                    </div>
-
+                    <!-- JS Injected -->
                 </div>
             </div>
         </section>
@@ -260,6 +213,94 @@
     </footer>
 
     <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
+    <script>
+        const voices = DB.voices;
+
+        const grid = document.getElementById('voicesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterNav = document.getElementById('filterNav');
+        let activeRole = 'all';
+
+        function renderVoices(data) {
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="p-8 text-center opacity-50 border border-dashed border-white/10 rounded">
+                        <p class="text-xl font-serif text-amber-200">Silence.</p>
+                        <p class="text-sm mt-2">No voices match your search.</p>
+                    </div>`;
+                return;
+            }
+
+            data.forEach((voice, index) => {
+                const card = document.createElement('div');
+                card.className = 'voice-dossier';
+                // Stagger animations if needed, though masonry makes it tricky
+
+                let badgeHTML = '';
+                if (voice.featured) {
+                    badgeHTML = `<span class="archivist-badge">Head Archivist</span>`;
+                }
+
+                // If name is Anonymous, don't link or handle differently? 
+                // For now, link everyone.
+                const nameHTML = voice.id.startsWith('anon')
+                    ? `<h3 class="voice-name">${voice.name}</h3>`
+                    : `<h3 class="voice-name"><a href="profile.html?id=${voice.id}" class="hover:text-amber-500 transition-colors">${voice.name}</a></h3>`;
+
+                card.innerHTML = `
+                    ${badgeHTML}
+                    <span class="voice-role">${voice.role} • ${voice.subrole}</span>
+                    ${nameHTML}
+                    <div class="voice-bio">
+                        <p>${voice.bio}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterVoices() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            const filtered = voices.filter(voice => {
+                const matchesSearch = voice.name.toLowerCase().includes(query) ||
+                    voice.bio.toLowerCase().includes(query) ||
+                    voice.subrole.toLowerCase().includes(query);
+
+                const matchesRole = activeRole === 'all' || voice.role === activeRole;
+
+                return matchesSearch && matchesRole;
+            });
+
+            renderVoices(filtered);
+        }
+
+        // Events
+        searchInput.addEventListener('input', filterVoices);
+
+        filterNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                // UI
+                filterNav.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('text-amber-500', 'font-bold', 'active');
+                    btn.classList.add('text-white/40');
+                });
+                e.target.classList.remove('text-white/40');
+                e.target.classList.add('text-amber-500', 'font-bold', 'active');
+
+                // Logic
+                activeRole = e.target.dataset.role;
+                filterVoices();
+            }
+        });
+
+        // Init
+        renderVoices(voices);
+
+    </script>
 </body>
 
 </html>

@@ -120,11 +120,16 @@
             background: rgba(10, 12, 16, 0.4);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            /* Prevents container from expanding beyond grid cell */
+            height: 100%;
         }
 
         .conduit-header {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+            /* Keeps header sized correctly */
         }
 
         .conduit-stream {
@@ -134,6 +139,7 @@
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.6);
             overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
         .ai-msg {
@@ -148,6 +154,11 @@
         .conduit-input {
             padding: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+            /* Keeps input area fixed size */
+            background: rgba(5, 7, 10, 0.8);
+            /* Slight background to separate from stream */
+            backdrop-filter: blur(10px);
         }
 
         .conduit-input input {
@@ -199,6 +210,222 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(249, 115, 22, 0.4);
         }
+
+        /* --- THEME OVERRIDES --- */
+        body.light-mode {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        body.light-mode .desk-header,
+        body.light-mode .desk-shelf,
+        body.light-mode .desk-conduit {
+            background: #ffffff;
+            border-color: #e5e7eb;
+        }
+
+        body.light-mode .desk-workspace {
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.05) 0%, transparent 70%),
+                linear-gradient(#e5e7eb 1px, transparent 1px),
+                linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+        }
+
+        body.light-mode .project-item {
+            color: #4b5563;
+        }
+
+        body.light-mode .project-item:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        body.light-mode .project-item.active {
+            background: rgba(249, 115, 22, 0.1);
+            color: #c2410c;
+        }
+
+        body.light-mode .resource-card {
+            background: #ffffff;
+            border-color: #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-mode h2,
+        body.light-mode h3,
+        body.light-mode h4,
+        body.light-mode .resource-title {
+            color: #111827;
+        }
+
+        body.light-mode p,
+        body.light-mode .conduit-stream {
+            color: #4b5563;
+        }
+
+        body.light-mode .tag-pill {
+            border-color: #e5e7eb;
+            color: #6b7280;
+        }
+
+        body.light-mode .conduit-input,
+        body.light-mode .conduit-header,
+        body.light-mode .desk-header,
+        body.light-mode .desk-shelf,
+        body.light-mode .desk-conduit,
+        body.light-mode .project-item {
+            border-color: #e5e7eb;
+        }
+
+        body.light-mode .conduit-input {
+            background: #ffffff;
+        }
+
+        body.light-mode .conduit-input input {
+            background: #f9fafb !important;
+            border-color: #d1d5db !important;
+            color: #111827 !important;
+        }
+
+        body.light-mode .conduit-input input::placeholder {
+            color: #9ca3af !important;
+        }
+
+        /* Light Mode Refinements */
+        body.light-mode {
+            background: #f9fafb;
+            /* Lighter gray/white */
+            color: #111827;
+        }
+
+        /* Override general Inputs for Light Mode */
+        body.light-mode input,
+        body.light-mode textarea,
+        body.light-mode .conduit-input input {
+            background-color: #ffffff !important;
+            border-color: #d1d5db !important;
+            color: #111827 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-mode input::placeholder,
+        body.light-mode ::placeholder {
+            color: #9ca3af !important;
+        }
+
+        /* Workspace Header (Restored Layout) */
+        .workspace-header {
+            position: relative;
+            padding: 0 0 2rem 0;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Aligns with top of title */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        body.light-mode .workspace-header {
+            border-bottom-color: #e5e7eb;
+            background: transparent;
+            /* Remove sticky background */
+        }
+
+        /* Light Mode Specifics */
+        body.light-mode .project-item {
+            color: #6b7280;
+        }
+
+        body.light-mode .project-item:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        body.light-mode .project-item.active {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fca5a5;
+        }
+
+        /* Light Red/Ember */
+
+        body.light-mode .btn-secondary {
+            border-color: #d1d5db;
+            color: #374151;
+            background: #ffffff;
+        }
+
+        body.light-mode .btn-secondary:hover {
+            border-color: #9ca3af;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        body.light-mode .tag-pill {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #4b5563;
+        }
+
+        body.light-mode .resource-card {
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .desk-shelf,
+        body.light-mode .desk-conduit,
+        body.light-mode .desk-header {
+            background: #ffffff;
+            border-color: #e5e7eb;
+        }
+
+        /* Fix Toolbar in Light Mode */
+        body.light-mode .desk-toolbar {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #e5e7eb;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .tool-btn {
+            color: #6b7280;
+        }
+
+        body.light-mode .tool-btn:hover {
+            background: #f3f4f6;
+            color: #f97316;
+        }
+
+        /* Compact Mode */
+        body.compact-mode .resource-card {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        body.compact-mode .resource-card p {
+            display: none;
+            /* Hide description in compact */
+        }
+
+        body.compact-mode .resource-card .flex-wrap {
+            margin-top: 0.5rem;
+        }
+
+        /* Input Visibility Fixes */
+        input,
+        textarea {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        .conduit-input input {
+            color: #ffffff !important;
+            background-color: rgba(20, 24, 30, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
     </style>
 </head>
 
@@ -225,129 +452,216 @@
         </header>
 
         <!-- LEFT: SHELF -->
-        <aside class="desk-shelf">
-            <h4 class="text-xs uppercase tracking-widest text-white/30 mb-6">Active Projects</h4>
-
-            <div class="project-item active">
-                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                </svg>
-                <div class="flex-grow">
-                    <div class="font-medium text-sm">The Salt Line</div>
-                    <div class="text-[0.65rem] opacity-60">3 Resources Loaded</div>
+        <aside class="desk-shelf flex flex-col gap-6">
+            <!-- Pinned Section -->
+            <div id="pinnedSection" class="hidden">
+                <h4 class="text-xs uppercase tracking-widest text-amber-500 mb-3 flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                    </svg>
+                    Pinned Items
+                </h4>
+                <div id="pinnedList" class="flex flex-col gap-2">
+                    <!-- Injected via JS -->
                 </div>
+                <div class="h-px bg-white/10 w-full mt-4"></div>
             </div>
 
-            <div class="project-item">
-                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                </svg>
-                <div class="flex-grow">
-                    <div class="font-medium text-sm">St. Jude Anomalies</div>
-                    <div class="text-[0.65rem] opacity-60">12 Resources Loaded</div>
-                </div>
-            </div>
+            <div class="flex flex-col gap-4">
+                <h4 class="text-xs uppercase tracking-widest text-white/30 mb-4">Active Projects</h4>
+                <div id="projectListContainer" class="flex flex-col gap-1">
+                    <!-- Project items move here -->
 
-            <div class="project-item">
-                <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                </svg>
-                <div class="flex-grow">
-                    <div class="font-medium text-sm">Vostok Signal</div>
-                    <div class="text-[0.65rem] opacity-60">1 Resource Loaded</div>
-                </div>
-            </div>
-
-            <button class="flex items-center gap-2 text-xs text-amber-500 hover:text-amber-400 mt-6 pl-2">
-                <span>+</span> Create New Project
-            </button>
-        </aside>
-
-        <!-- CENTER: WORKSPACE -->
-        <main class="desk-workspace">
-            <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h2 class="text-3xl font-serif text-mist mb-2">The Salt Line</h2>
-                    <p class="text-sm text-white/40 max-w-lg">Investigating the recurring phenomeona of "purple fog"
-                        along the northern coastlines during the late 90s.</p>
-                </div>
-                <div class="flex gap-2">
-                    <button class="btn-secondary text-xs py-2 px-4">Add Resource</button>
-                    <button class="text-white/40 hover:text-white p-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="project-item active">
+                        <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
-                            </path>
+                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                         </svg>
+                        <div class="flex-grow">
+                            <div class="font-medium text-sm">The Salt Line</div>
+                            <div class="text-[0.65rem] opacity-60">3 Resources Loaded</div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <div class="flex-grow">
+                            <div class="font-medium text-sm">St. Jude Anomalies</div>
+                            <div class="text-[0.65rem] opacity-60">12 Resources Loaded</div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <svg class="project-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <div class="flex-grow">
+                            <div class="font-medium text-sm">Vostok Signal</div>
+                            <div class="text-[0.65rem] opacity-60">1 Resource Loaded</div>
+                        </div>
+                    </div>
+
+                    <button
+                        class="flex items-center gap-2 text-xs text-amber-500 hover:text-amber-400 mt-4 pl-2 opacity-80 hover:opacity-100 transition-opacity self-start">
+                        <span>+</span> Create New Project
                     </button>
                 </div>
             </div>
+        </aside>
 
-            <!-- Resource Cards on the Desk -->
-            <div class="grid xl:grid-cols-2 gap-6">
-
-                <!-- Card 1 -->
-                <article class="resource-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- CENTER: WORKSPACE -->
+        <main class="desk-workspace relative"> <!-- Added relative for note layer positioning -->
+            <!-- Workspace Header (Sticky) -->
+            <div class="workspace-header">
+                <div>
+                    <h2 class="text-3xl font-serif text-mist mb-1">The Salt Line</h2>
+                    <p class="text-xs text-white/40 max-w-lg leading-relaxed">Investigating the recurring phenomena of
+                        "purple fog" along the northern coastlines during the late 90s.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="addResourceBtn" class="btn-secondary text-xs py-2 px-4">Add Resource</button>
+                    <div class="relative inline-block text-left">
+                        <button id="deskSettingsBtn"
+                            class="text-white/40 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                                    d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
                                 </path>
                             </svg>
-                            <span class="text-xs uppercase tracking-wide text-amber-500/80">Oral History #001</span>
+                        </button>
+                        <!-- Settings Dropdown -->
+                        <div id="deskSettingsMenu"
+                            class="hidden absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-white/10 overflow-hidden transform transition-all origin-top-right">
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <h5 class="text-xs uppercase tracking-widest text-white/40 mb-3">View Mode</h5>
+                                    <div class="flex bg-white/5 rounded-lg p-1">
+                                        <button
+                                            class="flex-1 py-1.5 text-xs font-medium rounded-md text-white hover:bg-white/10 transition-colors"
+                                            data-theme="dark">Dark</button>
+                                        <button
+                                            class="flex-1 py-1.5 text-xs font-medium rounded-md text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                                            data-theme="light">Light</button>
+                                    </div>
+                                </div>
+                                <div class="h-px bg-white/10"></div>
+                                <div>
+                                    <h5 class="text-xs uppercase tracking-widest text-white/40 mb-3">Typography</h5>
+                                    <div class="flex items-center justify-between gap-2">
+                                        <button id="decreaseFont"
+                                            class="w-8 h-8 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center border border-white/5">A-</button>
+                                        <span id="fontDisplay" class="text-xs text-white/60">100%</span>
+                                        <button id="increaseFont"
+                                            class="w-8 h-8 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center border border-white/5">A+</button>
+                                    </div>
+                                </div>
+                                <div class="h-px bg-white/10"></div>
+                                <div>
+                                    <h5 class="text-xs uppercase tracking-widest text-white/40 mb-3">Accent Signal</h5>
+                                    <div class="flex justify-between gap-1">
+                                        <button
+                                            class="w-6 h-6 rounded-full bg-amber-500 border-2 border-transparent hover:scale-110 transition-transform ring-offset-2 ring-offset-gray-900 focus:ring-2 focus:ring-amber-500/50"
+                                            data-color="#f97316"></button>
+                                        <button
+                                            class="w-6 h-6 rounded-full bg-blue-500 border-2 border-transparent hover:scale-110 transition-transform ring-offset-2 ring-offset-gray-900 focus:ring-2 focus:ring-blue-500/50"
+                                            data-color="#3b82f6"></button>
+                                        <button
+                                            class="w-6 h-6 rounded-full bg-emerald-500 border-2 border-transparent hover:scale-110 transition-transform ring-offset-2 ring-offset-gray-900 focus:ring-2 focus:ring-emerald-500/50"
+                                            data-color="#10b981"></button>
+                                        <button
+                                            class="w-6 h-6 rounded-full bg-purple-500 border-2 border-transparent hover:scale-110 transition-transform ring-offset-2 ring-offset-gray-900 focus:ring-2 focus:ring-purple-500/50"
+                                            data-color="#a855f7"></button>
+                                        <button
+                                            class="w-6 h-6 rounded-full bg-rose-500 border-2 border-transparent hover:scale-110 transition-transform ring-offset-2 ring-offset-gray-900 focus:ring-2 focus:ring-rose-500/50"
+                                            data-color="#f43f5e"></button>
+                                    </div>
+                                </div>
+                                <div class="h-px bg-white/10"></div>
+                                <button id="compactModeToggle"
+                                    class="w-full text-left text-xs text-white/60 hover:text-white flex items-center justify-between group">
+                                    <span>Compact Cards</span>
+                                    <div
+                                        class="w-8 h-4 rounded-full bg-white/10 relative transition-colors group-hover:bg-amber-500/20">
+                                        <div
+                                            class="absolute left-0.5 top-0.5 w-3 h-3 bg-white/40 rounded-full transition-all toggle-dot">
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
-                        <button class="text-white/20 hover:text-white">✕</button>
                     </div>
-                    <h3 class="text-lg font-serif text-white mb-2">The Lighthouse Keeper's Confession</h3>
-                    <p class="text-sm text-gray-400 mb-4 line-clamp-3">
-                        "It was exactly 03:00 hours when the main lamp died. Not flickered, not dimmed—died..."
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="tag-pill">Primary Source</span>
-                        <span class="tag-pill">Maritime</span>
-                    </div>
-                </article>
+                </div>
 
-                <!-- Card 2 -->
-                <article class="resource-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Resource Cards on the Desk -->
+                <div id="deskWorkspaceGrid" class="grid xl:grid-cols-2 gap-6">
+
+                    <!-- Card 1 -->
+                    <article class="resource-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                                    </path>
+                                </svg>
+                                <span class="text-xs uppercase tracking-wide text-amber-500/80">Oral History #001</span>
+                            </div>
+                            <button class="text-white/20 hover:text-white">✕</button>
+                        </div>
+                        <h3 class="text-lg font-serif text-white mb-2">The Lighthouse Keeper's Confession</h3>
+                        <p class="text-sm text-gray-400 mb-4 line-clamp-3">
+                            "It was exactly 03:00 hours when the main lamp died. Not flickered, not dimmed—died..."
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="tag-pill">Primary Source</span>
+                            <span class="tag-pill">Maritime</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="resource-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
+                                    </path>
+                                </svg>
+                                <span class="text-xs uppercase tracking-wide text-blue-400/80">Map Fragment</span>
+                            </div>
+                            <button class="text-white/20 hover:text-white">✕</button>
+                        </div>
+                        <h3 class="text-lg font-serif text-white mb-2">Topography of the Sunken City</h3>
+                        <p class="text-sm text-gray-400 mb-4 line-clamp-3">
+                            A rough charcoal sketch showing elevation lines that do not match current coastal surveys.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="tag-pill">Cartography</span>
+                            <span class="tag-pill">Redacted</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article
+                        class="resource-card border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:bg-white/5 cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
+                                    d="M12 4v16m8-8H4">
                                 </path>
                             </svg>
-                            <span class="text-xs uppercase tracking-wide text-blue-400/80">Map Fragment</span>
                         </div>
-                        <button class="text-white/20 hover:text-white">✕</button>
-                    </div>
-                    <h3 class="text-lg font-serif text-white mb-2">Topography of the Sunken City</h3>
-                    <p class="text-sm text-gray-400 mb-4 line-clamp-3">
-                        A rough charcoal sketch showing elevation lines that do not match current coastal surveys.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="tag-pill">Cartography</span>
-                        <span class="tag-pill">Redacted</span>
-                    </div>
-                </article>
+                        <span class="text-sm text-white/40">Drag resources here</span>
+                    </article>
 
-                <!-- Card 3 -->
-                <article
-                    class="resource-card border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:bg-white/5 cursor-pointer">
-                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-3">
-                        <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                            </path>
-                        </svg>
-                    </div>
-                    <span class="text-sm text-white/40">Drag resources here</span>
-                </article>
-
-            </div>
+                </div>
         </main>
 
         <!-- RIGHT: CONDUIT -->
@@ -380,54 +694,75 @@
 
     <!-- Scripts -->
     <script src="../public/js/site.js"></script>
-    <script>
-        // Simple Interaction Logic
-        const projects = document.querySelectorAll('.project-item');
-        const workspaceTitle = document.querySelector('main h2');
-        const conduitStream = document.querySelector('.conduit-stream');
-        const input = document.querySelector('.conduit-input input');
+    <!-- Resource Picker Modal -->
+    <div id="resourceModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center">
+        <div class="bg-gray-900 border border-white/10 rounded-lg w-full max-w-md p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-serif text-lg text-amber-500">Archive Retrieval</h3>
+                <button
+                    onclick="document.getElementById('resourceModal').classList.add('hidden'); document.getElementById('resourceModal').classList.remove('flex')"
+                    class="text-white/40 hover:text-white">✕</button>
+            </div>
+            <div id="modalList" class="max-h-60 overflow-y-auto mb-4 custom-scrollbar">
+                <!-- Dynamically populated -->
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-white/30">Select an item to decrypt and load into workspace.</p>
+            </div>
+        </div>
+    </div>
 
-        projects.forEach(p => {
-            p.addEventListener('click', () => {
-                projects.forEach(x => x.classList.remove('active'));
-                p.classList.add('active');
+    <!-- Create Project Modal -->
+    <div id="createProjectModal"
+        class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center">
+        <div
+            class="bg-gray-900 border border-white/10 rounded-lg w-full max-w-sm p-6 shadow-2xl relative overflow-hidden">
+            <!-- Decorative accent -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-amber-500/20"></div>
 
-                // Mock visual update
-                workspaceTitle.innerText = p.querySelector('.font-medium').innerText;
+            <h3 class="font-serif text-lg text-amber-500 mb-4">Initialize New Directive</h3>
 
-                // Mock AI response
-                const msg = document.createElement('div');
-                msg.className = 'ai-msg animate-pulse';
-                msg.innerHTML = `<strong>System:</strong> Switching context to ${workspaceTitle.innerText}...`;
-                conduitStream.appendChild(msg);
-                conduitStream.scrollTop = conduitStream.scrollHeight;
-            });
-        });
+            <div class="mb-5">
+                <label class="block text-xs uppercase tracking-wider text-white/40 mb-2">Project Designation</label>
+                <input type="text" id="newProjectTitle"
+                    class="w-full bg-white/5 border border-white/10 rounded p-2 text-white text-sm focus:border-amber-500/50 focus:outline-none placeholder-white/20"
+                    placeholder="e.g., Operation Silent Echo">
+            </div>
 
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const val = input.value;
-                input.value = '';
+            <div class="flex justify-end gap-3">
+                <button id="cancelCreateProjectBtn"
+                    class="px-3 py-1.5 text-xs text-white/40 hover:text-white transition-colors">Cancel</button>
+                <button id="confirmCreateProjectBtn"
+                    class="px-4 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 rounded text-xs uppercase tracking-wide transition-all">Initialize</button>
+            </div>
+        </div>
+    </div>
 
-                // User Msg
-                const userMsg = document.createElement('div');
-                userMsg.className = 'ai-msg';
-                userMsg.style.color = 'rgba(255,255,255,0.8)';
-                userMsg.innerHTML = `> ${val}`;
-                conduitStream.appendChild(userMsg);
+    <!-- Resource Detail Modal -->
+    <div id="resourceDetailModal"
+        class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 items-center justify-center p-4">
+        <div
+            class="bg-gray-900 border border-white/10 rounded-lg w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden relative">
+            <button id="closeDetailBtn"
+                class="absolute top-4 right-4 text-white/40 hover:text-white z-10 rounded-full p-1 hover:bg-white/10 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="p-8 overflow-y-auto custom-scrollbar h-full">
+                <div id="detailContent" class="space-y-6">
+                    <!-- Injected Content -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-                // Bot Msg
-                setTimeout(() => {
-                    const botMsg = document.createElement('div');
-                    botMsg.className = 'ai-msg';
-                    botMsg.innerHTML = `<strong>Assistant:</strong> Searching archive for "${val}"... No direct matches found in current project scope. Try widening the aperture.`;
-                    conduitStream.appendChild(botMsg);
-                    conduitStream.scrollTop = conduitStream.scrollHeight;
-                }, 800);
-            }
-        });
-
-    </script>
+    <!-- Scripts -->
+    <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
+    <script src="../public/js/desk.js"></script>
 </body>
 
 </html>
+```

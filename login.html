@@ -115,56 +115,66 @@
             </svg>
         </div>
 
-        <h1 class="text-xs uppercase tracking-[0.3em] text-white/50 mb-8">Security Checkpoint</h1>
+        <div class="flex border-b border-white/10 mb-8 pb-1 gap-6 justify-center">
+            <button id="tabLogin"
+                class="text-xs uppercase tracking-[0.2em] text-amber-500 pb-2 border-b-2 border-amber-500 transition-colors">Access</button>
+            <button id="tabSignup"
+                class="text-xs uppercase tracking-[0.2em] text-white/30 pb-2 border-b-2 border-transparent hover:text-white/60 transition-colors">Register</button>
+        </div>
 
-        <form id="gateForm">
-            <input type="password" id="passkey" placeholder="Enter Passkey" autocomplete="off" autofocus>
+        <!-- Login Form -->
+        <form id="gateForm" class="block">
+            <div class="space-y-6">
+                <input type="text" id="username" placeholder="Identity" class="auth-input" autocomplete="off" autofocus>
+                <input type="password" id="passkey" placeholder="Passkey" class="auth-input" autocomplete="off">
+            </div>
             <div class="error-msg" id="errorMsg">Access Denied</div>
+            <button type="submit"
+                class="w-full mt-6 bg-amber-500/10 border border-amber-500/50 text-amber-500 hover:bg-amber-500 hover:text-black py-2 text-xs uppercase tracking-widest transition-all">
+                Enter System
+            </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="hidden">
+            <div class="space-y-4">
+                <input type="text" id="newIdentifier" placeholder="Codename" class="auth-input" required>
+                <input type="email" id="newEmail" placeholder="Contact Frequency (Email)"
+                    class="auth-input text-base font-sans tracking-normal" required>
+                <input type="password" id="newPass" placeholder="Set Cipher" class="auth-input" required>
+            </div>
+            <div class="text-[0.6rem] text-white/40 mt-4 leading-relaxed">
+                By registering, you agree to become a Witness to the Archive.
+                <br>Email verification required for full clearance.
+            </div>
+            <button type="submit"
+                class="w-full mt-6 bg-white/5 border border-white/20 text-white hover:bg-white/10 py-2 text-xs uppercase tracking-widest transition-all">
+                Request Clearance
+            </button>
         </form>
     </div>
 
     <a href="index.html" class="back-link">Return to Public Archive</a>
 
-    <script>
-        const form = document.getElementById('gateForm');
-        const input = document.getElementById('passkey');
-        const errorMsg = document.getElementById('errorMsg');
+    <style>
+        .auth-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 0;
+            width: 100%;
+            text-align: center;
+            color: #f97316;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const val = input.value.trim().toUpperCase();
+        .auth-input:focus {
+            border-color: #f97316;
+        }
 
-            if (val === 'EMBER' || val === 'NOVA') {
-                // Success
-                input.style.color = '#34d399'; // Green
-                input.blur();
-                errorMsg.style.color = '#34d399';
-                errorMsg.innerText = 'Access Granted';
-                errorMsg.style.opacity = '1';
-
-                setTimeout(() => {
-                    window.location.href = 'desk/index.html';
-                }, 800);
-            } else {
-                // Fail
-                errorMsg.style.color = '#ef4444';
-                errorMsg.innerText = 'Incorrect Passkey';
-                errorMsg.style.opacity = '1';
-                input.value = '';
-
-                // Shake effect
-                form.style.transform = 'translateX(5px)';
-                setTimeout(() => form.style.transform = 'translateX(-5px)', 50);
-                setTimeout(() => form.style.transform = 'translateX(5px)', 100);
-                setTimeout(() => form.style.transform = 'translateX(0)', 150);
-            }
-        });
-
-        // Clear error on type
-        input.addEventListener('input', () => {
-            errorMsg.style.opacity = '0';
-        });
-    </script>
-</body>
-
-</html>
+        .auth-input::placeholder {
+            font-family: 'Inter', sans-serif;

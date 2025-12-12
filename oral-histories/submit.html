@@ -219,6 +219,7 @@
     </main>
 
     <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
     <script>
         // Form Interaction Logic
         const form = document.getElementById('submissionForm');
@@ -267,20 +268,45 @@
             filePreview.classList.add('hidden');
         });
 
-        // Mock Submission
+        // Mock Submission with "Persistence" logic
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            // Collect Data
+            const newStory = {
+                id: Date.now(), // Unique ID
+                title: document.getElementById('storyTitle').value,
+                contributor: document.getElementById('contributorName').value,
+                location: document.getElementById('location').value,
+                era: document.getElementById('era').value || "Unknown",
+                summary: document.getElementById('storyContent').value.substring(0, 120) + "...",
+                tags: ["community", "pending"],
+                status: "pending"
+            };
+
+            // "Save" to local brain (illusion of persistence for this session)
+            DB.stories.unshift(newStory);
+
+            // Persist to LocalStorage so other pages can see it during this session/demo
+            const storedStories = JSON.parse(localStorage.getItem('voxStories') || '[]');
+            storedStories.unshift(newStory);
+            localStorage.setItem('voxStories', JSON.stringify(storedStories));
+
+            console.log("New Story Added:", newStory);
 
             // Visual loading state
             const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            btn.innerText = 'Transmitting...';
+            btn.innerHTML = '<span class="animate-pulse">Transmitting Signal...</span>';
             btn.style.opacity = '0.7';
 
-            // Simulate API latency
+            // Simulate Network / Upload Latency
             setTimeout(() => {
                 successModal.classList.add('visible');
-            }, 1500);
+                // Optional: Reset form behind modal
+                form.reset();
+                removeFile.click();
+            }, 1200);
         });
     </script>
 </body>

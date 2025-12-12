@@ -17,9 +17,6 @@
             /* Slightly darker/cooler than main */
         }
 
-        .category-sidebar {
-            /* Desktop sidebar styling */
-        }
 
         .category-btn {
             display: flex;
@@ -55,7 +52,6 @@
             /* Square for object feel */
             position: relative;
             overflow: hidden;
-            group: group;
             transition: all 0.3s ease;
         }
 
@@ -186,25 +182,41 @@
                 <!-- Taxonomy Sidebar -->
                 <aside class="md:col-span-1">
                     <div class="sticky top-20">
+                        <!-- Search Box -->
+                        <div class="mb-8">
+                            <h4 class="text-xs uppercase tracking-widest text-white/40 mb-3">Search Vault</h4>
+                            <div class="relative">
+                                <input type="text" id="searchInput" placeholder="ID or Keyword..."
+                                    class="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-colors">
+                                <svg class="w-4 h-4 text-white/20 absolute right-3 top-2.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
                         <h4 class="text-xs uppercase tracking-widest text-white/40 mb-6">Classification</h4>
-                        <nav>
-                            <button class="category-btn active">All Artifacts</button>
-                            <button class="category-btn">Manuscripts</button>
-                            <button class="category-btn">Ephemera</button>
-                            <button class="category-btn">Cartography</button>
-                            <button class="category-btn">Oddities</button>
+                        <nav id="categoryNav">
+                            <button class="category-btn active" data-category="all">All Artifacts</button>
+                            <button class="category-btn" data-category="Manuscript">Manuscripts</button>
+                            <button class="category-btn" data-category="Ephemera">Ephemera</button>
+                            <button class="category-btn" data-category="Cartography">Cartography</button>
+                            <button class="category-btn" data-category="Oddities">Oddities</button>
                         </nav>
 
                         <h4 class="text-xs uppercase tracking-widest text-white/40 mb-6 mt-12">Clearance</h4>
                         <div class="flex flex-col gap-2">
                             <label
                                 class="flex items-center gap-3 text-sm text-white/60 cursor-pointer hover:text-white">
-                                <input type="checkbox" class="accent-amber-500 bg-white/10 border-white/20" checked>
+                                <input type="checkbox" id="checkVerified"
+                                    class="accent-amber-500 bg-white/10 border-white/20" checked>
                                 Public Domain
                             </label>
                             <label
                                 class="flex items-center gap-3 text-sm text-white/60 cursor-pointer hover:text-white">
-                                <input type="checkbox" class="accent-red-500 bg-white/10 border-white/20">
+                                <input type="checkbox" id="checkRedacted"
+                                    class="accent-red-500 bg-white/10 border-white/20" checked>
                                 Restricted / Dangerous
                             </label>
                         </div>
@@ -223,62 +235,19 @@
     </main>
 
     <script src="../public/js/site.js"></script>
+    <script src="../public/js/db.js"></script>
     <script>
-        // Mock Artifact Data
-        const artifacts = [
-            {
-                id: "MS-902",
-                title: "Journal of the Silent Coast",
-                type: "Manuscript",
-                status: "verified",
-                icon: "book"
-            },
-            {
-                id: "OBJ-11",
-                title: "Iron Key (No Ward)",
-                type: "Oddities",
-                status: "verified",
-                icon: "key"
-            },
-            {
-                id: "MAP-04",
-                title: "Topography of the Sunken City",
-                type: "Cartography",
-                status: "redacted",
-                icon: "map"
-            },
-            {
-                id: "VIA-22",
-                title: "Sample: Water from Blackwood",
-                type: "Oddities",
-                status: "verified",
-                icon: "vial"
-            },
-            {
-                id: "EP-88",
-                title: "Train Ticket (One Way, 1924)",
-                type: "Ephemera",
-                status: "verified",
-                icon: "ticket"
-            },
-            {
-                id: "MS-104",
-                title: "The Unfinished Symphony",
-                type: "Manuscript",
-                status: "verified",
-                icon: "scroll"
-            },
-            {
-                id: "OBJ-00",
-                title: "Charred Compass",
-                type: "Oddities",
-                status: "redacted",
-                icon: "compass"
-            }
-        ];
+        // Data Source
+        const artifacts = DB.artifacts;
 
-        // Render Logic
+        // DOM Elements
         const grid = document.getElementById('artifactGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryNav = document.getElementById('categoryNav');
+        const checkVerified = document.getElementById('checkVerified');
+        const checkRedacted = document.getElementById('checkRedacted');
+
+        let activeCategory = 'all';
 
         function getIconPath(type) {
             // Simple SVG paths for icons
@@ -294,27 +263,86 @@
             return icons[type] || icons['book'];
         }
 
-        artifacts.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'artifact-card cursor-pointer';
-            card.style.animationDelay = `${index * 0.05}s`;
-            // Note: In a real app we would link to /archive/item.html?id=...
+        function renderArtifacts(data) {
+            grid.innerHTML = '';
 
-            card.innerHTML = `
-                <div class="artifact-img-placeholder">
-                    <svg class="artifact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="${getIconPath(item.icon)}"></path>
-                    </svg>
-                    <span class="status-badge ${item.status}">${item.status === 'redacted' ? 'Restricted' : 'Verified'}</span>
-                </div>
-                <div class="artifact-content">
-                    <span class="artifact-id">${item.id}</span>
-                    <h4 class="artifact-title">${item.title}</h4>
-                    <p class="text-xs text-white/40 mt-1">${item.type}</p>
-                </div>
-            `;
-            grid.appendChild(card);
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 opacity-50">
+                        <p class="text-xl font-serif text-amber-200">Vault Empty.</p>
+                        <p class="text-sm mt-2">No artifacts match the current aperture.</p>
+                    </div>`;
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'artifact-card cursor-pointer';
+                card.style.animationDelay = `${index * 0.05}s`;
+
+                card.innerHTML = `
+                <a href="item.html?id=${item.id}" class="block h-full">
+                    <div class="artifact-img-placeholder">
+                        <svg class="artifact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="${getIconPath(item.icon)}"></path>
+                        </svg>
+                        <span class="status-badge ${item.status}">${item.status === 'redacted' ? 'Restricted' : 'Verified'}</span>
+                    </div>
+                    <div class="artifact-content">
+                        <span class="artifact-id">${item.id}</span>
+                        <h4 class="artifact-title">${item.title}</h4>
+                        <p class="text-xs text-white/40 mt-1">${item.type}</p>
+                    </div>
+                </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterArtifacts() {
+            const query = searchInput.value.toLowerCase().trim();
+            const showVerified = checkVerified.checked;
+            const showRedacted = checkRedacted.checked;
+
+            const filtered = artifacts.filter(item => {
+                // 1. Search Match
+                const matchSearch = item.title.toLowerCase().includes(query) ||
+                    item.id.toLowerCase().includes(query) ||
+                    item.type.toLowerCase().includes(query);
+
+                // 2. Category Match
+                const matchCat = activeCategory === 'all' || item.type === activeCategory;
+
+                // 3. Status Match
+                let matchStatus = false;
+                if (item.status === 'verified' && showVerified) matchStatus = true;
+                if (item.status === 'redacted' && showRedacted) matchStatus = true;
+
+                return matchSearch && matchCat && matchStatus;
+            });
+
+            renderArtifacts(filtered);
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', filterArtifacts);
+        checkVerified.addEventListener('change', filterArtifacts);
+        checkRedacted.addEventListener('change', filterArtifacts);
+
+        categoryNav.addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                // Update UI
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Logic
+                activeCategory = e.target.dataset.category;
+                filterArtifacts();
+            }
         });
+
+        // Init
+        renderArtifacts(artifacts);
 
     </script>
 </body>

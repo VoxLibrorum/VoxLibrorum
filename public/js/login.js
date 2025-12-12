@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ username, password })
                 });
 
-                // Check if 404 (Server API missing) or Network Error
-                if (res.status === 404 || res.status === 500) throw new Error('OFFLINE_MODE');
+                // Check if 404 (Server API missing) or Network Error or 405 (GitHub Pages POST not allowed)
+                if (!res.ok) throw new Error('OFFLINE_MODE');
 
                 const data = await res.json();
 
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ username, email, password })
                 });
 
-                if (res.status === 404 || res.status === 500) throw new Error('OFFLINE_MODE');
+                if (!res.ok) throw new Error('OFFLINE_MODE');
 
                 const data = await res.json();
 
